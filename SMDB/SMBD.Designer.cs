@@ -55,6 +55,7 @@
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.projectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.MenuCurrentDB.SuspendLayout();
             this.MenuHorizontal.SuspendLayout();
             this.SuspendLayout();
@@ -263,6 +264,13 @@
             this.projectToolStripMenuItem.Size = new System.Drawing.Size(78, 29);
             this.projectToolStripMenuItem.Text = "Project";
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(305, 113);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 26);
+            this.textBox1.TabIndex = 3;
+            // 
             // SMBD
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -270,6 +278,7 @@
             this.BackColor = System.Drawing.SystemColors.Menu;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1345, 615);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.MenuCurrentDB);
             this.Controls.Add(this.MenuHorizontal);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -323,6 +332,7 @@
         private System.Windows.Forms.ToolStripMenuItem MenuClose;
         private System.Windows.Forms.ToolStripMenuItem MenuDeleteDB;
         private System.Windows.Forms.ToolStripMenuItem MenuSeparator5;
+        private System.Windows.Forms.TextBox textBox1;
 
     }
 }
