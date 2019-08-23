@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
+using SMDB.Classes;
 
 namespace SMDB
 {
@@ -27,7 +29,7 @@ namespace SMDB
         private void btnBrowse_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-
+            
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 this.selectedPath = folderBrowserDialog.SelectedPath;
@@ -38,9 +40,18 @@ namespace SMDB
         private void btnSaveDB_Click(object sender, EventArgs e)
         {
             string path = this.selectedPath + "\\" + this.txtName.Text;
-            System.IO.Directory.CreateDirectory(path);
+            string metadata = path + "\\" + ".db";
+            Directory.CreateDirectory(path);
+
+
             this.Parent_SMBD.currentPath = path;
             this.Parent_SMBD.currentDB = this.txtName.Text;
+            this.Parent_SMBD.MenuUpdate(true);
+            this.Parent_SMBD.TitleUpdate();
+            this.Parent_SMBD.DisplayDB();
+            
+            FileHandler.createFile(metadata);
+            
             this.Hide();
         }
     }

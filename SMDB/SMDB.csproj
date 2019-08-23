@@ -44,11 +44,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Database.cs" />
+    <Compile Include="Classes\FileHandler.cs" />
     <Compile Include="CREATE_DB.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="CREATE_DB.Designer.cs">
       <DependentUpon>CREATE_DB.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CREATE_TABLE.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CREATE_TABLE.Designer.cs">
+      <DependentUpon>CREATE_TABLE.cs</DependentUpon>
     </Compile>
     <Compile Include="SMBD.cs">
       <SubType>Form</SubType>
@@ -60,6 +68,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="CREATE_DB.resx">
       <DependentUpon>CREATE_DB.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CREATE_TABLE.resx">
+      <DependentUpon>CREATE_TABLE.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SMBD.resx">
       <DependentUpon>SMBD.cs</DependentUpon>
@@ -169,7 +180,7 @@
     <None Include="Resources\folderdb.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Classes\" />
+    <None Include="Resources\table-icon.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\background.jpg" />

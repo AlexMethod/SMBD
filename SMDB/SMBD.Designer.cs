@@ -28,24 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SMBD));
-            this.MenuCurrentDB = new System.Windows.Forms.MenuStrip();
-            this.MenuSeparator5 = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuHorizontal = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuConnectDB = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuDisconnectDB = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuSeparator1 = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuNewProject = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuNewFile = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuSeparator2 = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuNewDB = new System.Windows.Forms.ToolStripMenuItem();
-            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.projectToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.fileToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuClose = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuDeleteDB = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuSeparator4 = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuRecentFiles = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,34 +46,25 @@
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.projectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.MenuCurrentDB.SuspendLayout();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.MenuHConnectDB = new System.Windows.Forms.ToolStripButton();
+            this.MenuHDisconnectDB = new System.Windows.Forms.ToolStripButton();
+            this.MenuHNewDB = new System.Windows.Forms.ToolStripButton();
+            this.MenuHDeleteDB = new System.Windows.Forms.ToolStripButton();
+            this.SplitContainer = new System.Windows.Forms.SplitContainer();
+            this.TreeView = new System.Windows.Forms.TreeView();
+            this.MenuRightTreeView = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.MenuRCreateTable = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuRRenameDB = new System.Windows.Forms.ToolStripMenuItem();
+            this.ImagesList = new System.Windows.Forms.ImageList(this.components);
             this.MenuHorizontal.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SplitContainer)).BeginInit();
+            this.SplitContainer.Panel1.SuspendLayout();
+            this.SplitContainer.SuspendLayout();
+            this.MenuRightTreeView.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // MenuCurrentDB
-            // 
-            this.MenuCurrentDB.AllowMerge = false;
-            this.MenuCurrentDB.AutoSize = false;
-            this.MenuCurrentDB.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.MenuCurrentDB.Dock = System.Windows.Forms.DockStyle.Left;
-            this.MenuCurrentDB.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
-            this.MenuCurrentDB.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.MenuCurrentDB.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.MenuSeparator5});
-            this.MenuCurrentDB.Location = new System.Drawing.Point(0, 33);
-            this.MenuCurrentDB.Name = "MenuCurrentDB";
-            this.MenuCurrentDB.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.MenuCurrentDB.Size = new System.Drawing.Size(202, 582);
-            this.MenuCurrentDB.TabIndex = 1;
-            this.MenuCurrentDB.Text = "menuStrip2";
-            // 
-            // MenuSeparator5
-            // 
-            this.MenuSeparator5.Name = "MenuSeparator5";
-            this.MenuSeparator5.Size = new System.Drawing.Size(198, 29);
-            this.MenuSeparator5.Text = "-----------------------";
             // 
             // MenuHorizontal
             // 
@@ -104,7 +87,6 @@
             this.MenuDisconnectDB,
             this.MenuSeparator1,
             this.newToolStripMenuItem,
-            this.openToolStripMenuItem,
             this.toolStripMenuItem4,
             this.MenuSeparator4,
             this.MenuRecentFiles,
@@ -139,33 +121,10 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.MenuNewProject,
-            this.MenuNewFile,
-            this.MenuSeparator2,
             this.MenuNewDB});
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.Size = new System.Drawing.Size(278, 30);
             this.newToolStripMenuItem.Text = "New";
-            // 
-            // MenuNewProject
-            // 
-            this.MenuNewProject.Image = global::SMDB.Properties.Resources.projectdb;
-            this.MenuNewProject.Name = "MenuNewProject";
-            this.MenuNewProject.Size = new System.Drawing.Size(271, 30);
-            this.MenuNewProject.Text = "Project   Ctrl+Shift+N";
-            // 
-            // MenuNewFile
-            // 
-            this.MenuNewFile.Image = global::SMDB.Properties.Resources.filedb;
-            this.MenuNewFile.Name = "MenuNewFile";
-            this.MenuNewFile.Size = new System.Drawing.Size(271, 30);
-            this.MenuNewFile.Text = "File   Ctrl+N";
-            // 
-            // MenuSeparator2
-            // 
-            this.MenuSeparator2.Name = "MenuSeparator2";
-            this.MenuSeparator2.Size = new System.Drawing.Size(271, 30);
-            this.MenuSeparator2.Text = "-----------------------";
             // 
             // MenuNewDB
             // 
@@ -175,44 +134,13 @@
             this.MenuNewDB.Text = "Database   Ctrl+Alt+N";
             this.MenuNewDB.Click += new System.EventHandler(this.MenuNewDB_Click);
             // 
-            // openToolStripMenuItem
-            // 
-            this.openToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.projectToolStripMenuItem2,
-            this.fileToolStripMenuItem2});
-            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(278, 30);
-            this.openToolStripMenuItem.Text = "Open";
-            // 
-            // projectToolStripMenuItem2
-            // 
-            this.projectToolStripMenuItem2.Image = global::SMDB.Properties.Resources.folderdb;
-            this.projectToolStripMenuItem2.Name = "projectToolStripMenuItem2";
-            this.projectToolStripMenuItem2.Size = new System.Drawing.Size(266, 30);
-            this.projectToolStripMenuItem2.Text = "Project   Ctrl+Shift+O";
-            // 
-            // fileToolStripMenuItem2
-            // 
-            this.fileToolStripMenuItem2.Image = global::SMDB.Properties.Resources.filedb;
-            this.fileToolStripMenuItem2.Name = "fileToolStripMenuItem2";
-            this.fileToolStripMenuItem2.Size = new System.Drawing.Size(266, 30);
-            this.fileToolStripMenuItem2.Text = "File   Ctrl+O";
-            // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.MenuClose,
             this.MenuDeleteDB});
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
             this.toolStripMenuItem4.Size = new System.Drawing.Size(278, 30);
             this.toolStripMenuItem4.Text = "Close";
-            // 
-            // MenuClose
-            // 
-            this.MenuClose.Image = global::SMDB.Properties.Resources.keydb;
-            this.MenuClose.Name = "MenuClose";
-            this.MenuClose.Size = new System.Drawing.Size(273, 30);
-            this.MenuClose.Text = "Close   Ctrl+X";
             // 
             // MenuDeleteDB
             // 
@@ -220,6 +148,7 @@
             this.MenuDeleteDB.Name = "MenuDeleteDB";
             this.MenuDeleteDB.Size = new System.Drawing.Size(273, 30);
             this.MenuDeleteDB.Text = "Delete DB   Ctrl+Alt+X";
+            this.MenuDeleteDB.Click += new System.EventHandler(this.MenuDeleteDB_Click);
             // 
             // MenuSeparator4
             // 
@@ -264,12 +193,155 @@
             this.projectToolStripMenuItem.Size = new System.Drawing.Size(78, 29);
             this.projectToolStripMenuItem.Text = "Project";
             // 
-            // textBox1
+            // toolStrip1
             // 
-            this.textBox1.Location = new System.Drawing.Point(552, 97);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 26);
-            this.textBox1.TabIndex = 3;
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel1,
+            this.MenuHConnectDB,
+            this.MenuHDisconnectDB,
+            this.MenuHNewDB,
+            this.MenuHDeleteDB});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 33);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(1345, 31);
+            this.toolStrip1.TabIndex = 3;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(86, 28);
+            this.toolStripLabel1.Text = "Database";
+            // 
+            // MenuHConnectDB
+            // 
+            this.MenuHConnectDB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.MenuHConnectDB.Image = global::SMDB.Properties.Resources.okdb;
+            this.MenuHConnectDB.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.MenuHConnectDB.Name = "MenuHConnectDB";
+            this.MenuHConnectDB.Size = new System.Drawing.Size(28, 28);
+            this.MenuHConnectDB.Text = "Connect DB";
+            this.MenuHConnectDB.Click += new System.EventHandler(this.MenuHConnectDB_Click);
+            // 
+            // MenuHDisconnectDB
+            // 
+            this.MenuHDisconnectDB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.MenuHDisconnectDB.Image = global::SMDB.Properties.Resources.nodb;
+            this.MenuHDisconnectDB.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.MenuHDisconnectDB.Name = "MenuHDisconnectDB";
+            this.MenuHDisconnectDB.Size = new System.Drawing.Size(28, 28);
+            this.MenuHDisconnectDB.Text = "Disconnect DB";
+            this.MenuHDisconnectDB.Click += new System.EventHandler(this.MenuHDisconnectDB_Click);
+            // 
+            // MenuHNewDB
+            // 
+            this.MenuHNewDB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.MenuHNewDB.Image = global::SMDB.Properties.Resources.folderdb;
+            this.MenuHNewDB.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.MenuHNewDB.Name = "MenuHNewDB";
+            this.MenuHNewDB.Size = new System.Drawing.Size(28, 28);
+            this.MenuHNewDB.Text = "Create DB";
+            this.MenuHNewDB.Click += new System.EventHandler(this.MenuHNewDB_Click);
+            // 
+            // MenuHDeleteDB
+            // 
+            this.MenuHDeleteDB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.MenuHDeleteDB.Image = global::SMDB.Properties.Resources.deletedb;
+            this.MenuHDeleteDB.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.MenuHDeleteDB.Name = "MenuHDeleteDB";
+            this.MenuHDeleteDB.Size = new System.Drawing.Size(28, 28);
+            this.MenuHDeleteDB.Text = "Delete DB";
+            this.MenuHDeleteDB.Click += new System.EventHandler(this.MenuHDeleteDB_Click);
+            // 
+            // SplitContainer
+            // 
+            this.SplitContainer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.SplitContainer.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.SplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SplitContainer.Location = new System.Drawing.Point(0, 64);
+            this.SplitContainer.Name = "SplitContainer";
+            // 
+            // SplitContainer.Panel1
+            // 
+            this.SplitContainer.Panel1.Controls.Add(this.TreeView);
+            this.SplitContainer.Size = new System.Drawing.Size(1345, 551);
+            this.SplitContainer.SplitterDistance = 243;
+            this.SplitContainer.TabIndex = 4;
+            // 
+            // TreeView
+            // 
+            this.TreeView.Cursor = System.Windows.Forms.Cursors.Default;
+            this.TreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TreeView.ImageIndex = 16;
+            this.TreeView.ImageList = this.ImagesList;
+            this.TreeView.LabelEdit = true;
+            this.TreeView.Location = new System.Drawing.Point(0, 0);
+            this.TreeView.Name = "TreeView";
+            this.TreeView.SelectedImageIndex = 0;
+            this.TreeView.Size = new System.Drawing.Size(241, 549);
+            this.TreeView.TabIndex = 0;
+            this.TreeView.BeforeLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.TreeView_BeforeLabelEdit);
+            this.TreeView.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.TreeView_AfterLabelEdit);
+            // 
+            // MenuRightTreeView
+            // 
+            this.MenuRightTreeView.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.MenuRightTreeView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuRCreateTable,
+            this.MenuRRenameDB});
+            this.MenuRightTreeView.Name = "MenuRightTreeView";
+            this.MenuRightTreeView.Size = new System.Drawing.Size(179, 64);
+            // 
+            // MenuRCreateTable
+            // 
+            this.MenuRCreateTable.Name = "MenuRCreateTable";
+            this.MenuRCreateTable.Size = new System.Drawing.Size(198, 30);
+            this.MenuRCreateTable.Text = "Create table";
+            this.MenuRCreateTable.Click += new System.EventHandler(this.MenuRCreateTable_Click);
+            // 
+            // MenuRRenameDB
+            // 
+            this.MenuRRenameDB.Name = "MenuRRenameDB";
+            this.MenuRRenameDB.Size = new System.Drawing.Size(198, 30);
+            this.MenuRRenameDB.Text = "Rename";
+            this.MenuRRenameDB.Click += new System.EventHandler(this.MenuRRenameDB_Click);
+            // 
+            // ImagesList
+            // 
+            this.ImagesList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ImagesList.ImageStream")));
+            this.ImagesList.TransparentColor = System.Drawing.Color.Transparent;
+            this.ImagesList.Images.SetKeyName(0, "table-icon.jpg");
+            this.ImagesList.Images.SetKeyName(1, "background.jpg");
+            this.ImagesList.Images.SetKeyName(2, "bd.png");
+            this.ImagesList.Images.SetKeyName(3, "bdblue.png");
+            this.ImagesList.Images.SetKeyName(4, "computerdb.jpg");
+            this.ImagesList.Images.SetKeyName(5, "connectdb.jpg");
+            this.ImagesList.Images.SetKeyName(6, "db.ico");
+            this.ImagesList.Images.SetKeyName(7, "DB_Architecture.png");
+            this.ImagesList.Images.SetKeyName(8, "dbPlatinum.ico");
+            this.ImagesList.Images.SetKeyName(9, "deletedb.png");
+            this.ImagesList.Images.SetKeyName(10, "dotteddb.png");
+            this.ImagesList.Images.SetKeyName(11, "filedb.png");
+            this.ImagesList.Images.SetKeyName(12, "folderdb.png");
+            this.ImagesList.Images.SetKeyName(13, "healthdb.png");
+            this.ImagesList.Images.SetKeyName(14, "keydb.png");
+            this.ImagesList.Images.SetKeyName(15, "lockdb.png");
+            this.ImagesList.Images.SetKeyName(16, "nodb.png");
+            this.ImagesList.Images.SetKeyName(17, "okdb.png");
+            this.ImagesList.Images.SetKeyName(18, "plusdb.png");
+            this.ImagesList.Images.SetKeyName(19, "positiondb.jpg");
+            this.ImagesList.Images.SetKeyName(20, "projectdb.png");
+            this.ImagesList.Images.SetKeyName(21, "relationdb.jpg");
+            this.ImagesList.Images.SetKeyName(22, "reloaddb.png");
+            this.ImagesList.Images.SetKeyName(23, "searchdb.png");
+            this.ImagesList.Images.SetKeyName(24, "settingsdb.png");
+            this.ImagesList.Images.SetKeyName(25, "severaldb.png");
+            this.ImagesList.Images.SetKeyName(26, "tooldb.png");
+            this.ImagesList.Images.SetKeyName(27, "uploaddb.jpg");
+            this.ImagesList.Images.SetKeyName(28, "user.png");
+            this.ImagesList.Images.SetKeyName(29, "userdb.png");
+            this.ImagesList.Images.SetKeyName(30, "usersdb.png");
             // 
             // SMBD
             // 
@@ -278,8 +350,8 @@
             this.BackColor = System.Drawing.SystemColors.Menu;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1345, 615);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.MenuCurrentDB);
+            this.Controls.Add(this.SplitContainer);
+            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.MenuHorizontal);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
@@ -288,10 +360,14 @@
             this.Text = "SMBD";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
-            this.MenuCurrentDB.ResumeLayout(false);
-            this.MenuCurrentDB.PerformLayout();
             this.MenuHorizontal.ResumeLayout(false);
             this.MenuHorizontal.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
+            this.SplitContainer.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.SplitContainer)).EndInit();
+            this.SplitContainer.ResumeLayout(false);
+            this.MenuRightTreeView.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -299,21 +375,15 @@
 
         #endregion
 
-        private System.Windows.Forms.MenuStrip MenuCurrentDB;
         private System.Windows.Forms.MenuStrip MenuHorizontal;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem projectToolStripMenuItem;
-        private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.ToolStripMenuItem MenuConnectDB;
         private System.Windows.Forms.ToolStripMenuItem MenuDisconnectDB;
         private System.Windows.Forms.ToolStripMenuItem MenuSeparator1;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem MenuNewProject;
-        private System.Windows.Forms.ToolStripMenuItem MenuNewFile;
-        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem MenuSeparator2;
         private System.Windows.Forms.ToolStripMenuItem MenuNewDB;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem MenuSeparator4;
@@ -324,15 +394,23 @@
         //MY VARIABLES-----------------------------------------------
         public string currentPath = "";
         private CREATE_DB Create_DB = new CREATE_DB();
+        private CREATE_TABLE Create_Table = new CREATE_TABLE();
         public string currentDB = "";
 
         //-----------------------------------------------------------
-        private System.Windows.Forms.ToolStripMenuItem projectToolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem MenuClose;
         private System.Windows.Forms.ToolStripMenuItem MenuDeleteDB;
-        private System.Windows.Forms.ToolStripMenuItem MenuSeparator5;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.SplitContainer SplitContainer;
+        private System.Windows.Forms.TreeView TreeView;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.Windows.Forms.ToolStripButton MenuHConnectDB;
+        private System.Windows.Forms.ToolStripButton MenuHNewDB;
+        private System.Windows.Forms.ToolStripButton MenuHDisconnectDB;
+        private System.Windows.Forms.ContextMenuStrip MenuRightTreeView;
+        private System.Windows.Forms.ToolStripMenuItem MenuRCreateTable;
+        private System.Windows.Forms.ToolStripMenuItem MenuRRenameDB;
+        private System.Windows.Forms.ToolStripButton MenuHDeleteDB;
+        private System.Windows.Forms.ImageList ImagesList;
 
     }
 }
