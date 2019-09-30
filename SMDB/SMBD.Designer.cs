@@ -54,10 +54,9 @@
             this.MenuHDeleteDB = new System.Windows.Forms.ToolStripButton();
             this.SplitContainer = new System.Windows.Forms.SplitContainer();
             this.TreeView = new System.Windows.Forms.TreeView();
+            this.ImagesList = new System.Windows.Forms.ImageList(this.components);
             this.MenuRightTreeView = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.MenuRCreateTable = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuRRenameDB = new System.Windows.Forms.ToolStripMenuItem();
-            this.ImagesList = new System.Windows.Forms.ImageList(this.components);
             this.MenuHorizontal.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SplitContainer)).BeginInit();
@@ -284,29 +283,6 @@
             this.TreeView.BeforeLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.TreeView_BeforeLabelEdit);
             this.TreeView.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.TreeView_AfterLabelEdit);
             // 
-            // MenuRightTreeView
-            // 
-            this.MenuRightTreeView.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.MenuRightTreeView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.MenuRCreateTable,
-            this.MenuRRenameDB});
-            this.MenuRightTreeView.Name = "MenuRightTreeView";
-            this.MenuRightTreeView.Size = new System.Drawing.Size(179, 64);
-            // 
-            // MenuRCreateTable
-            // 
-            this.MenuRCreateTable.Name = "MenuRCreateTable";
-            this.MenuRCreateTable.Size = new System.Drawing.Size(198, 30);
-            this.MenuRCreateTable.Text = "Create table";
-            this.MenuRCreateTable.Click += new System.EventHandler(this.MenuRCreateTable_Click);
-            // 
-            // MenuRRenameDB
-            // 
-            this.MenuRRenameDB.Name = "MenuRRenameDB";
-            this.MenuRRenameDB.Size = new System.Drawing.Size(198, 30);
-            this.MenuRRenameDB.Text = "Rename";
-            this.MenuRRenameDB.Click += new System.EventHandler(this.MenuRRenameDB_Click);
-            // 
             // ImagesList
             // 
             this.ImagesList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ImagesList.ImageStream")));
@@ -342,6 +318,21 @@
             this.ImagesList.Images.SetKeyName(28, "user.png");
             this.ImagesList.Images.SetKeyName(29, "userdb.png");
             this.ImagesList.Images.SetKeyName(30, "usersdb.png");
+            // 
+            // MenuRightTreeView
+            // 
+            this.MenuRightTreeView.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.MenuRightTreeView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuRCreateTable});
+            this.MenuRightTreeView.Name = "MenuRightTreeView";
+            this.MenuRightTreeView.Size = new System.Drawing.Size(179, 34);
+            // 
+            // MenuRCreateTable
+            // 
+            this.MenuRCreateTable.Name = "MenuRCreateTable";
+            this.MenuRCreateTable.Size = new System.Drawing.Size(178, 30);
+            this.MenuRCreateTable.Text = "Create table";
+            this.MenuRCreateTable.Click += new System.EventHandler(this.MenuRCreateTable_Click);
             // 
             // SMBD
             // 
@@ -408,7 +399,6 @@
         private System.Windows.Forms.ToolStripButton MenuHDisconnectDB;
         private System.Windows.Forms.ContextMenuStrip MenuRightTreeView;
         private System.Windows.Forms.ToolStripMenuItem MenuRCreateTable;
-        private System.Windows.Forms.ToolStripMenuItem MenuRRenameDB;
         private System.Windows.Forms.ToolStripButton MenuHDeleteDB;
         private System.Windows.Forms.ImageList ImagesList;
 

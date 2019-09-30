@@ -44,8 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Attribute.cs" />
     <Compile Include="Classes\Database.cs" />
     <Compile Include="Classes\FileHandler.cs" />
+    <Compile Include="Classes\Registry.cs" />
+    <Compile Include="Classes\Table.cs" />
     <Compile Include="CREATE_DB.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -168,23 +168,31 @@ namespace SMDB
 
         public void RenameDatabase(string newName)
         {
-            string origin = this.currentPath;
-            string destiny = this.currentPath.Replace(this.currentDB,newName);
-            string[] files = Directory.GetFiles(origin);
-            string[] newFiles = new string[files.Length];
-            for (int i = 0; i < files.Length; i++)
+            if (newName != null && newName != "" )
             {
-                string newFile = files[i].Replace(this.currentDB,newName);
-                newFiles[i] = newFile;
+                string origin = this.currentPath;
+                string destiny = this.currentPath.Replace(this.currentDB, newName);
+                string[] files = Directory.GetFiles(origin);
+                string[] newFiles = new string[files.Length];
+                for (int i = 0; i < files.Length; i++)
+                {
+                    string newFile = files[i].Replace(this.currentDB, newName);
+                    newFiles[i] = newFile;
+                }
+                if (isDB())
+                {
+                    Directory.Delete(origin, true);
+                    Directory.CreateDirectory(destiny);
+                    FileHandler.createFiles(newFiles);
+                    this.currentPath = destiny;
+                    this.currentDB = newName;
+                    this.Text = destiny;
+                }
             }
-            if (isDB())
+            else
             {
-                Directory.Delete(origin, true);
-                Directory.CreateDirectory(destiny);
-                FileHandler.createFiles(newFiles);
-                this.currentPath = destiny;
-                this.currentDB = newName;
-                this.Text = destiny;
+                string message = "The DB must have a name";
+                DialogResult result = MessageBox.Show(message, "Not Name", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
         }
@@ -304,7 +312,7 @@ namespace SMDB
 
         private void TreeView_BeforeLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
-            if (e.Node.Level != 0)
+            if (e.Node != null && e.Node.Level != 0)
             {
                 e.CancelEdit = true;
             }
@@ -312,7 +320,12 @@ namespace SMDB
 
         private void TreeView_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
-            RenameDatabase(e.Label);
+            
+            if (e.Label != null && e.Label != "")
+            {
+                RenameDatabase(e.Label);
+            }
+            
         }
     }
 }

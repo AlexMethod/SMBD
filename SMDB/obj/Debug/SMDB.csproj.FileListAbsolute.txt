@@ -17,5 +17,6 @@ C:\Users\usuario\Desktop\esau\Archivos\9noSemestre\BASES_DATOS_A\SMBD\SMDB\obj\D
 C:\Users\usuario\Desktop\esau\Archivos\9noSemestre\BASES_DATOS_A\SMBD\SMDB\obj\Debug\SMDB.SMBD.resources
 C:\Users\usuario\Desktop\esau\Archivos\9noSemestre\BASES_DATOS_A\SMBD\SMDB\obj\Debug\SMDB.Properties.Resources.resources
 C:\Users\usuario\Desktop\esau\Archivos\9noSemestre\BASES_DATOS_A\SMBD\SMDB\obj\Debug\SMDB.csproj.GenerateResource.Cache
-C:\Users\usuario\Desktop\esau\Archivos\9noSemestre\BASES_DATOS_A\SMBD\SMDB\obj\Debug\SMDB.csprojResolveAssemblyReference.cache
 C:\Users\usuario\Desktop\esau\Archivos\9noSemestre\BASES_DATOS_A\SMBD\SMDB\obj\Debug\SMDB.CREATE_TABLE.resources
+C:\Users\usuario\Desktop\esau\Archivos\9noSemestre\BASES_DATOS_A\SMBD\SMDB\obj\Debug\SMDB.csprojAssemblyReference.cache
+C:\Users\usuario\Desktop\esau\Archivos\9noSemestre\BASES_DATOS_A\SMBD\SMDB\obj\Debug\SMDB.csproj.CoreCompileInputs.cache
