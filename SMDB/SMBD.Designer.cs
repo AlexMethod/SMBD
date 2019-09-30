@@ -42,7 +42,7 @@
             this.MenuSeparator4 = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuRecentFiles = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuSeparator3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.projectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,12 +57,15 @@
             this.ImagesList = new System.Windows.Forms.ImageList(this.components);
             this.MenuRightTreeView = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.MenuRCreateTable = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuRightTable = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.MenuRTableDeleteTable = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuHorizontal.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SplitContainer)).BeginInit();
             this.SplitContainer.Panel1.SuspendLayout();
             this.SplitContainer.SuspendLayout();
             this.MenuRightTreeView.SuspendLayout();
+            this.MenuRightTable.SuspendLayout();
             this.SuspendLayout();
             // 
             // MenuHorizontal
@@ -90,7 +93,7 @@
             this.MenuSeparator4,
             this.MenuRecentFiles,
             this.MenuSeparator3,
-            this.toolStripMenuItem6});
+            this.MenuExit});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(50, 29);
             this.fileToolStripMenuItem.Text = "File";
@@ -167,12 +170,12 @@
             this.MenuSeparator3.Size = new System.Drawing.Size(278, 30);
             this.MenuSeparator3.Text = "-----------------------";
             // 
-            // toolStripMenuItem6
+            // MenuExit
             // 
-            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-            this.toolStripMenuItem6.Size = new System.Drawing.Size(278, 30);
-            this.toolStripMenuItem6.Text = "Exit          Alt+F4";
-            this.toolStripMenuItem6.Click += new System.EventHandler(this.toolStripMenuItem6_Click);
+            this.MenuExit.Name = "MenuExit";
+            this.MenuExit.Size = new System.Drawing.Size(278, 30);
+            this.MenuExit.Text = "Exit          Alt+F4";
+            this.MenuExit.Click += new System.EventHandler(this.MenuExit_Click);
             // 
             // editToolStripMenuItem
             // 
@@ -282,6 +285,7 @@
             this.TreeView.TabIndex = 0;
             this.TreeView.BeforeLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.TreeView_BeforeLabelEdit);
             this.TreeView.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.TreeView_AfterLabelEdit);
+            this.TreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TreeView_NodeMouseClick);
             // 
             // ImagesList
             // 
@@ -334,6 +338,21 @@
             this.MenuRCreateTable.Text = "Create table";
             this.MenuRCreateTable.Click += new System.EventHandler(this.MenuRCreateTable_Click);
             // 
+            // MenuRightTable
+            // 
+            this.MenuRightTable.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.MenuRightTable.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuRTableDeleteTable});
+            this.MenuRightTable.Name = "MenuRightTable";
+            this.MenuRightTable.Size = new System.Drawing.Size(180, 34);
+            // 
+            // MenuRTableDeleteTable
+            // 
+            this.MenuRTableDeleteTable.Name = "MenuRTableDeleteTable";
+            this.MenuRTableDeleteTable.Size = new System.Drawing.Size(240, 30);
+            this.MenuRTableDeleteTable.Text = "Delete Table";
+            this.MenuRTableDeleteTable.Click += new System.EventHandler(this.MenuRTableDeleteTable_Click);
+            // 
             // SMBD
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -350,7 +369,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SMBD";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             this.MenuHorizontal.ResumeLayout(false);
             this.MenuHorizontal.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
@@ -359,6 +377,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.SplitContainer)).EndInit();
             this.SplitContainer.ResumeLayout(false);
             this.MenuRightTreeView.ResumeLayout(false);
+            this.MenuRightTable.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -380,7 +399,7 @@
         private System.Windows.Forms.ToolStripMenuItem MenuSeparator4;
         private System.Windows.Forms.ToolStripMenuItem MenuRecentFiles;
         private System.Windows.Forms.ToolStripMenuItem MenuSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem6;
+        private System.Windows.Forms.ToolStripMenuItem MenuExit;
 
         //MY VARIABLES-----------------------------------------------
         public string currentPath = "";
@@ -404,7 +423,8 @@
         private System.Windows.Forms.ToolStripMenuItem MenuRCreateTable;
         private System.Windows.Forms.ToolStripButton MenuHDeleteDB;
         private System.Windows.Forms.ImageList ImagesList;
-
+        private System.Windows.Forms.ContextMenuStrip MenuRightTable;
+        private System.Windows.Forms.ToolStripMenuItem MenuRTableDeleteTable;
     }
 }
 
