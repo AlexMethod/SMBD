@@ -24,6 +24,11 @@ namespace SMDB.Classes
             }
         }
 
+        public static void renameFile(string oldName, string newName)
+        {
+            File.Move(oldName,newName);
+        }
+
         public static FileStream openFile(string name)
         {
             try

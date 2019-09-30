@@ -387,6 +387,9 @@
         private CREATE_DB Create_DB = new CREATE_DB();
         private CREATE_TABLE Create_Table = new CREATE_TABLE();
         public string currentDB = "";
+        public bool isEditDB = false;
+        public bool isEditTable = false;
+        public bool isEditAttribute = false;
 
         //-----------------------------------------------------------
         private System.Windows.Forms.ToolStripMenuItem MenuDeleteDB;

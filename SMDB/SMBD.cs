@@ -197,6 +197,23 @@ namespace SMDB
 
         }
 
+        public void RenameTable(string oldName,string newName)
+        {
+            if (newName != null && newName != ""  && this.currentPath != "")
+            {
+                string origin = this.currentPath + "\\" + oldName + ".dbtable";
+                string destiny = this.currentPath + "\\" + newName + ".dbtable";
+
+                File.Move(origin, destiny);
+            }
+            else
+            {
+                string message = "The Table must have a name";
+                DialogResult result = MessageBox.Show(message, "Not Name", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+        }
+
         private void toolStripMenuItem6_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -310,21 +327,71 @@ namespace SMDB
             
         }
 
+        //Controls what object is going to be edited (Name)
         private void TreeView_BeforeLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
-            if (e.Node != null && e.Node.Level != 0)
+            if(e.Node != null)
             {
-                e.CancelEdit = true;
+                if(e.Node.Level == 0)
+                {
+                    isEditDB = true;
+                    isEditTable = false;
+                    isEditAttribute = false;
+                }
+                else if(e.Node.Level == 1)
+                {
+                    isEditDB = false;
+                    isEditTable = true;
+                    isEditAttribute = false;
+                }
+                else if(e.Node.Level == 2)
+                {
+                    isEditDB = false;
+                    isEditTable = false;
+                    isEditAttribute = true;
+                }
             }
+            else
+            {
+                isEditDB = false;
+                isEditTable = false;
+                isEditAttribute = false;
+            }
+
+
+            //if (e.Node != null && e.Node.Level != 0)
+            //{
+            //    e.CancelEdit = true;
+            //}
         }
 
         private void TreeView_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
-            
-            if (e.Label != null && e.Label != "")
+            if(e.Node != null && e.Label != null && e.Label != "")
             {
-                RenameDatabase(e.Label);
+                if (isEditDB)
+                {
+                    RenameDatabase(e.Label);
+                }else if (isEditTable)
+                {
+                    RenameTable(e.Node.Text,e.Label);
+                }else if (isEditAttribute)
+                {
+                    //RenameAttribute(e.Node.Parent.Text,e.Node.Text,e.Label);
+                }
+                
             }
+            else
+            {
+                isEditDB = false;
+                isEditTable = false;
+                isEditAttribute = false;
+            }
+            
+            //if (e.Label != null && e.Label != "")
+            //{
+            //    RenameDatabase(e.Label);
+            //}
             
         }
     }
