@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SMDB.Classes
 {
-    class Registry
+    public class Registry
     {
     }
 }

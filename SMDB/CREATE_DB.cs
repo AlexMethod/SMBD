@@ -39,20 +39,14 @@ namespace SMDB
 
         private void btnSaveDB_Click(object sender, EventArgs e)
         {
-            string path = this.selectedPath + "\\" + this.txtName.Text;
+            string path = selectedPath + "\\" + txtName.Text;
             string metadata = path + "\\" + ".db";
-            Directory.CreateDirectory(path);
-
-
-            this.Parent_SMBD.currentPath = path;
-            this.Parent_SMBD.currentDB = this.txtName.Text;
-            this.Parent_SMBD.MenuUpdate(true);
-            this.Parent_SMBD.TitleUpdate();
-            this.Parent_SMBD.DisplayDB();
             
-            FileHandler.createFile(metadata);
-            
-            this.Hide();
+            Parent_SMBD.DB = new Database(txtName.Text,path);
+            Parent_SMBD.MenuUpdate(true);
+            Parent_SMBD.TitleUpdate();
+            Parent_SMBD.DisplayDB();
+            Hide();
         }
     }
 }

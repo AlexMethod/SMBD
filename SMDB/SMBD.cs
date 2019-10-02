@@ -120,7 +120,7 @@ namespace SMDB
         }
         public void TitleUpdate()
         {
-            this.Text = this.currentPath;
+            this.Text = DB.Path;
         }
         public void DisplayDB()
         {
@@ -128,7 +128,7 @@ namespace SMDB
             //Display DB
             //Display all tables
             TreeView.Nodes.Clear();
-            string[] files = System.IO.Directory.GetFiles(this.currentPath);
+            string[] files = FileHandler.getFilesDirectory(DB.Path);
             string[] tables = Array.FindAll(files, x => x.Split('.')[1] == "dbtable");
 
             TreeNode[] childs = new TreeNode[tables.Length];
@@ -138,7 +138,7 @@ namespace SMDB
                 childs[i] = new TreeNode(table_name, 0, 0);
                 childs[i].ContextMenuStrip = MenuRightTable;
             }
-            TreeNode rootDatabase = new TreeNode(this.currentDB, 10, 10, childs);
+            TreeNode rootDatabase = new TreeNode(DB.Name, 10, 10, childs);
             rootDatabase.ContextMenuStrip = MenuRightTreeView;
             TreeView.Nodes.Add(rootDatabase);
             TreeView.ExpandAll();
@@ -179,24 +179,22 @@ namespace SMDB
         #region DATABASE
         public void CreateDatabase()
         {
-            this.Create_DB = new CREATE_DB();
-            this.Create_DB.Parent_SMBD = this;
-            this.Create_DB.Show();
+            Create_DB = new CREATE_DB();
+            Create_DB.Parent_SMBD = this;
+            Create_DB.Show();
         }
         public void DeleteDatabase()
         {
-            string messageAnswer = String.Format("Are you sure you want to delete the current Database{0}{1}", Environment.NewLine, this.currentDB);
+            string messageAnswer = String.Format("Are you sure you want to delete the current Database{0}{1}", Environment.NewLine, DB.Name);
             string messageError = "The object is not available";
-            if (isDB())
+            if (DB.isDB())
             {
                 DialogResult result = MessageBox.Show(messageAnswer, "Delete Database!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
                 if (result == DialogResult.Yes)
                 {
-                    System.IO.Directory.Delete(this.currentPath, true);
-                    this.currentPath = "";
-                    this.currentDB = "";
-                    this.Text = "SMBD";
+                    DB.Delete();
+                    Text = "SMBD";
                     MenuUpdate(false);
                     TreeView.Nodes.Clear();
                 }
@@ -210,24 +208,7 @@ namespace SMDB
         {
             if (newName != null && newName != "")
             {
-                string origin = this.currentPath;
-                string destiny = this.currentPath.Replace(this.currentDB, newName);
-                string[] files = Directory.GetFiles(origin);
-                string[] newFiles = new string[files.Length];
-                for (int i = 0; i < files.Length; i++)
-                {
-                    string newFile = files[i].Replace(this.currentDB, newName);
-                    newFiles[i] = newFile;
-                }
-                if (isDB())
-                {
-                    Directory.Delete(origin, true);
-                    Directory.CreateDirectory(destiny);
-                    FileHandler.createFiles(newFiles);
-                    this.currentPath = destiny;
-                    this.currentDB = newName;
-                    this.Text = destiny;
-                }
+                DB.Rename(newName);
             }
             else
             {
@@ -236,28 +217,13 @@ namespace SMDB
             }
 
         }
-        public bool isDB()
-        {
-            bool response = false;
-            string[] files = System.IO.Directory.GetFiles(this.currentPath);
-            foreach (string file in files)
-            {
-                string filename = file.Split('.')[1];
-                if (filename == "db")
-                {
-                    response = true;
-                    break;
-                }
-            }
-            return response;
-        }
+        
         public void CloseDatabase()
         {
             TreeView.Nodes.Clear();
             MenuUpdate(false);
-            this.Text = "SMBD";
-            this.currentDB = "";
-            this.currentPath = "";
+            Text = "SMBD";
+            DB = null;
         }
         public void OpenDatabase()
         {
@@ -269,10 +235,9 @@ namespace SMDB
 
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
-                this.currentPath = folderBrowserDialog.SelectedPath;
-                string[] folders = this.currentPath.Split('\\');
-                this.currentDB = folders[folders.Length - 1];
-                if (isDB())
+                string[] folders = folderBrowserDialog.SelectedPath.Split('\\');
+                DB = new Database(folders[folders.Length - 1], folderBrowserDialog.SelectedPath, false);
+                if (DB.isDB())
                 {
                     MenuUpdate(true);
                     TitleUpdate();
@@ -281,6 +246,7 @@ namespace SMDB
                 else
                 {
                     string message = "The selected object is not a DB";
+                    DB = null;
                     DialogResult result = MessageBox.Show(message, "Not a DB", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     OpenDatabase();
                 }
@@ -305,12 +271,12 @@ namespace SMDB
         }
         public void RenameTable(string oldName, string newName)
         {
-            if (newName != null && newName != "" && this.currentPath != "")
+            if (newName != null && newName != "" && DB.Path != "")
             {
-                string origin = this.currentPath + "\\" + oldName + ".dbtable";
-                string destiny = this.currentPath + "\\" + newName + ".dbtable";
+                string origin = DB.Path + "\\" + oldName + ".dbtable";
+                string destiny = DB.Path + "\\" + newName + ".dbtable";
 
-                File.Move(origin, destiny);
+                DB.tables.Find(x => x.Name == origin).Rename(destiny);
             }
             else
             {
@@ -331,8 +297,9 @@ namespace SMDB
 
                 if (result == DialogResult.Yes)
                 {
-                    string tablePath = Path.Combine(currentPath, selected.Text + ".dbtable");
-                    File.Delete(tablePath);
+                    string tablePath = Path.Combine(DB.Path, selected.Text + ".dbtable");
+                    DB.tables.Find(x => x.Name == tablePath).Delete();
+                    DB.tables.Remove(DB.tables.Find(x => x.Name == tablePath));
                     DisplayDB();
                 }
             }
@@ -433,7 +400,7 @@ namespace SMDB
 
         #endregion
 
-        //SELECT NODE WHEN CLICK
+        //SELECT NODE WHEN RIGHT CLICK
         private void TreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             TreeView.SelectedNode = e.Node;

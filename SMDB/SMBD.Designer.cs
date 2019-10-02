@@ -1,4 +1,5 @@
-﻿namespace SMDB
+﻿using SMDB.Classes;
+namespace SMDB
 {
     partial class SMBD
     {
@@ -409,6 +410,7 @@
         public bool isEditDB = false;
         public bool isEditTable = false;
         public bool isEditAttribute = false;
+        public Database DB = null;
 
         //-----------------------------------------------------------
         private System.Windows.Forms.ToolStripMenuItem MenuDeleteDB;
