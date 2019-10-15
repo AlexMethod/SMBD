@@ -124,24 +124,34 @@ namespace SMDB
         }
         public void DisplayDB()
         {
-
-            //Display DB
-            //Display all tables
             TreeView.Nodes.Clear();
-            string[] files = FileHandler.getFilesDirectory(DB.Path);
-            string[] tables = Array.FindAll(files, x => x.Split('.')[1] == "dbtable");
 
-            TreeNode[] childs = new TreeNode[tables.Length];
-            for (int i = 0; i < tables.Length; i++)
+            TreeNode[] tables = new TreeNode[DB.tables.Count];
+            for (int indexTable = 0; indexTable < tables.Length; indexTable++)
             {
-                string table_name = tables[i].Split('\\')[tables[i].Split('\\').Length - 1].Split('.')[0];
-                childs[i] = new TreeNode(table_name, 0, 0);
-                childs[i].ContextMenuStrip = MenuRightTable;
+                Table t = DB.tables[indexTable];
+                if(t.attributes.Count > 0)
+                {
+                    TreeNode[] attributes = new TreeNode[t.attributes.Count];
+                    for (int indexAttr = 0; indexAttr < t.attributes.Count; indexAttr++)
+                    {
+                        Attribute_ attr = t.attributes[indexAttr];
+                        attributes[indexAttr] = new TreeNode(attr.Name, 32, 32);
+                    }
+                    tables[indexTable] = new TreeNode(t.ShortName,0,0, attributes);
+                }
+                else
+                {
+                    tables[indexTable] = new TreeNode(t.ShortName,0,0);
+                }
+                tables[indexTable].ContextMenuStrip = MenuRightTable;
             }
-            TreeNode rootDatabase = new TreeNode(DB.Name, 10, 10, childs);
-            rootDatabase.ContextMenuStrip = MenuRightTreeView;
+
+            TreeNode rootDatabase = new TreeNode(DB.Name, 10, 10, tables);
             TreeView.Nodes.Add(rootDatabase);
-            TreeView.ExpandAll();
+            rootDatabase.ContextMenuStrip = MenuRightTreeView;
+            //TreeView.ExpandAll();
+            ExpandToLevel(TreeView.Nodes, 1);
 
         }
         #endregion
@@ -265,8 +275,7 @@ namespace SMDB
         #region TABLE
         private void CreateTable()
         {
-            Create_Table = new CREATE_TABLE();
-            Create_Table.Parent_SMBD = this;
+            Create_Table = new CREATE_TABLE(this);
             Create_Table.Show();
         }
         public void RenameTable(string oldName, string newName)
@@ -404,6 +413,49 @@ namespace SMDB
         private void TreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             TreeView.SelectedNode = e.Node;
+        }
+
+        private void TreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            TreeView.SelectedNode = e.Node;
+            if (e.Node != null)
+            {
+                if (e.Node.Level == 0)
+                {
+                    //Do something
+                }
+                else if (e.Node.Level == 1)
+                {
+                    //Do Something
+                    
+
+                }
+                else if (e.Node.Level == 2)
+                {
+                    //Do Something
+                }
+            }
+        }
+
+        private void ExpandToLevel(TreeNodeCollection nodes, int level)
+        {
+            if (level > 0)
+            {
+                foreach (TreeNode node in nodes)
+                {
+                    node.Expand();
+                    ExpandToLevel(node.Nodes, level - 1);
+                }
+            }
+        }
+
+        private void MenuRTableAddAttribute_Click(object sender, EventArgs e)
+        {
+            TreeNode selected = TreeView.SelectedNode;
+            Table t = DB.tables.Where(x => x.ShortName == selected.Text).First();
+            CREATE_TABLE create_table = new CREATE_TABLE("Add Attribute",this);
+            create_table.SetEdit(t);
+            create_table.Show();
         }
     }
 }

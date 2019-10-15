@@ -1,4 +1,5 @@
-﻿namespace SMDB
+﻿using SMDB.Classes;
+namespace SMDB
 {
     partial class CREATE_TABLE
     {
@@ -92,6 +93,7 @@
             // txtName
             // 
             this.txtName.Location = new System.Drawing.Point(131, 104);
+            this.txtName.MaxLength = 30;
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(981, 26);
             this.txtName.TabIndex = 8;
@@ -229,6 +231,9 @@
 
         //MY VARIABLES
         public SMBD Parent_SMBD;
+        public string Command = "ALTA";
+        public Table TableEdit;
+        //-------------------
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ContextMenuStrip MenuRRow;
         private System.Windows.Forms.ToolStripMenuItem MRRowDeleteRow;

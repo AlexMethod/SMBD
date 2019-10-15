@@ -44,8 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Attribute.cs" />
+    <Compile Include="Classes\Attribute_.cs" />
     <Compile Include="Classes\Database.cs" />
+    <Compile Include="Classes\ExceptionError.cs" />
     <Compile Include="Classes\FileHandler.cs" />
     <Compile Include="Classes\Registry.cs" />
     <Compile Include="Classes\Table.cs" />
@@ -196,6 +197,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\addattribute.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\attribute2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\attribute1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -60,6 +60,8 @@ namespace SMDB
             this.MenuRCreateTable = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuRightTable = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.MenuRTableDeleteTable = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.MenuRTableAddAttribute = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuHorizontal.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SplitContainer)).BeginInit();
@@ -287,6 +289,7 @@ namespace SMDB
             this.TreeView.BeforeLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.TreeView_BeforeLabelEdit);
             this.TreeView.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.TreeView_AfterLabelEdit);
             this.TreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TreeView_NodeMouseClick);
+            this.TreeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TreeView_NodeMouseDoubleClick);
             // 
             // ImagesList
             // 
@@ -323,6 +326,8 @@ namespace SMDB
             this.ImagesList.Images.SetKeyName(28, "user.png");
             this.ImagesList.Images.SetKeyName(29, "userdb.png");
             this.ImagesList.Images.SetKeyName(30, "usersdb.png");
+            this.ImagesList.Images.SetKeyName(31, "attribute1.png");
+            this.ImagesList.Images.SetKeyName(32, "attribute2.png");
             // 
             // MenuRightTreeView
             // 
@@ -343,16 +348,30 @@ namespace SMDB
             // 
             this.MenuRightTable.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.MenuRightTable.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuRTableAddAttribute,
+            this.toolStripSeparator1,
             this.MenuRTableDeleteTable});
             this.MenuRightTable.Name = "MenuRightTable";
-            this.MenuRightTable.Size = new System.Drawing.Size(180, 34);
+            this.MenuRightTable.Size = new System.Drawing.Size(241, 103);
             // 
             // MenuRTableDeleteTable
             // 
             this.MenuRTableDeleteTable.Name = "MenuRTableDeleteTable";
-            this.MenuRTableDeleteTable.Size = new System.Drawing.Size(240, 30);
+            this.MenuRTableDeleteTable.Size = new System.Drawing.Size(193, 30);
             this.MenuRTableDeleteTable.Text = "Delete Table";
             this.MenuRTableDeleteTable.Click += new System.EventHandler(this.MenuRTableDeleteTable_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(190, 6);
+            // 
+            // MenuRTableAddAttribute
+            // 
+            this.MenuRTableAddAttribute.Name = "MenuRTableAddAttribute";
+            this.MenuRTableAddAttribute.Size = new System.Drawing.Size(240, 30);
+            this.MenuRTableAddAttribute.Text = "Add Attribute";
+            this.MenuRTableAddAttribute.Click += new System.EventHandler(this.MenuRTableAddAttribute_Click);
             // 
             // SMBD
             // 
@@ -405,7 +424,7 @@ namespace SMDB
         //MY VARIABLES-----------------------------------------------
         public string currentPath = "";
         private CREATE_DB Create_DB = new CREATE_DB();
-        private CREATE_TABLE Create_Table = new CREATE_TABLE();
+        private CREATE_TABLE Create_Table;
         public string currentDB = "";
         public bool isEditDB = false;
         public bool isEditTable = false;
@@ -427,6 +446,8 @@ namespace SMDB
         private System.Windows.Forms.ImageList ImagesList;
         private System.Windows.Forms.ContextMenuStrip MenuRightTable;
         private System.Windows.Forms.ToolStripMenuItem MenuRTableDeleteTable;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem MenuRTableAddAttribute;
     }
 }
 

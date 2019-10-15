@@ -64,7 +64,9 @@ namespace SMDB.Classes
             tables = new List<Table>();
             string[] files = FileHandler.getFilesDirectory(Path);
             string[] stringTables = Array.FindAll(files, x => x.Split('.')[1] == "dbtable");
-            for(int i = 0; i < stringTables.Length; i++)
+            for(
+                
+                int i = 0; i < stringTables.Length; i++)
             {
                 int indexCurrentTable = FileHandler.bytesToInt(FileHandler.readFromFile(stringTables[i],4,0));
                 Table table = new Table(stringTables[i], indexCurrentTable, false);

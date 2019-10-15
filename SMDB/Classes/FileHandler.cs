@@ -115,10 +115,42 @@ namespace SMDB.Classes
             return intBytes;
         }
 
+        public static byte[] longToBytes(long number)
+        {
+            byte[] intBytes = BitConverter.GetBytes(number).ToArray();
+            return intBytes;
+        }
+
         public static int bytesToInt(byte[] bytes)
         {
             int num = BitConverter.ToInt32(bytes, 0);
             return num;
+        }
+
+        public static long bytesToLong(byte[] bytes)
+        {
+            long num = BitConverter.ToInt64(bytes, 0);
+            return num;
+        }
+
+        public static byte[] stringToBytes(string str)
+        {
+            byte[] bytes = Encoding.ASCII.GetBytes(str);
+            return bytes;
+        }
+
+        public static string bytesToString(byte[] bytes)
+        {
+            string str = Encoding.ASCII.GetString(bytes);
+            return str;
+        }
+
+        public static long getFileLength(string filename)
+        {
+            FileStream fileStream = openFile(filename);
+            long length = fileStream.Length;
+            fileStream.Dispose(); fileStream.Close();
+            return length;
         }
 
 
