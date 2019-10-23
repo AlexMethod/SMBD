@@ -231,8 +231,9 @@ namespace SMDB
 
         //MY VARIABLES
         public SMBD Parent_SMBD;
-        public string Command = "ALTA";
+        public string Command = "ADD_TABLE";
         public Table TableEdit;
+        public Attribute_ AttributeEdit;
         //-------------------
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ContextMenuStrip MenuRRow;

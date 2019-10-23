@@ -35,6 +35,7 @@ namespace SMDB.Classes
         {
             FileHandler.fileMove(Name, newName);
             Name = newName;
+            ShortName = Name.Split('\\')[Name.Split('\\').Length - 1].Split('.')[0];
         }
 
         public void Delete()
@@ -42,21 +43,40 @@ namespace SMDB.Classes
             FileHandler.deleteFile(Name);
         }
 
-        public void GetAttributes()
+        public List<Attribute_> GetAttributes()
         {
+            attributes = new List<Attribute_>();
             long tamFile = FileHandler.getFileLength(Name);
-            int tamAttribute = 54;
+            
             int index = 4;
-            var operation = ((tamFile - 4) / 54);
+            var operation = ((tamFile - 4) / Attribute_.TamAttribute);
             int cantAttributes = unchecked(operation == (int)operation) ? (int)(operation) : 0;
 
             for (int i = 0; i < cantAttributes; i++)
             {
                 Attribute_ attribute = new Attribute_(Name, ShortName, index);
-                attributes.Add(attribute);
-                index += tamAttribute;
+                if(attribute.Status == 1) attributes.Add(attribute);
+                index += Attribute_.TamAttribute;
             }
+            return attributes;
+        }
 
+        public long GetRewritableAA()
+        {
+            List<Attribute_> rewritableAttr = new List<Attribute_>();
+            long tamFile = FileHandler.getFileLength(Name);
+
+            int index = 4;
+            var operation = ((tamFile - 4) / Attribute_.TamAttribute);
+            int cantAttributes = unchecked(operation == (int)operation) ? (int)(operation) : 0;
+
+            for (int i = 0; i < cantAttributes; i++)
+            {
+                Attribute_ attribute = new Attribute_(Name, ShortName, index);
+                if (attribute.Status == 0) rewritableAttr.Add(attribute);
+                index += Attribute_.TamAttribute;
+            }
+            return rewritableAttr.Count() > 0 ? rewritableAttr.First().AA : 0;
         }
 
     }

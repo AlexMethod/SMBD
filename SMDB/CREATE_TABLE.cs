@@ -17,6 +17,8 @@ namespace SMDB
         {
             Parent_SMBD = parent_smbd;
             InitializeComponent();
+            DataGridViewRowEventArgs e = new DataGridViewRowEventArgs(DGAttributes.Rows[0]);
+            DGAttributes_DefaultValuesNeeded(new object(), e);
         }
         public CREATE_TABLE(string Title,SMBD parent_smbd)
         {
@@ -47,17 +49,17 @@ namespace SMDB
             bool isOkAttributes = false;
             try {
                 if (txtName.Text == "") throw NoTableName;
-                if (Parent_SMBD.DB.tables.Where(x => x.ShortName == txtName.Text).Count() > 0 && Command =="ALTA") throw SameTableName;
+                if (Parent_SMBD.DB.tables.Where(x => x.ShortName == txtName.Text).Count() > 0 && Command =="ADD_TABLE") throw SameTableName;
                 isOkAttributes = ValidateAttributes();
             }
             catch (ExceptionError err) { err.showMessage(); }
 
             if (isOkAttributes)
             {
-                Table NTable = Command == "ALTA" ? new Table(newFile, Parent_SMBD.DB.GetNextIDTable()) : TableEdit;
+                Table NTable = Command == "ADD_TABLE" ? new Table(newFile, Parent_SMBD.DB.GetNextIDTable()) : TableEdit;
                 List<Attribute_> attributes = SaveAttributes(NTable);
                 NTable.GetAttributes();
-                Parent_SMBD.DB.tables.Add(NTable);
+               if(Command == "ADD_TABLE") Parent_SMBD.DB.tables.Add(NTable);
                 Parent_SMBD.DisplayDB();
                 Hide();
             }
@@ -75,10 +77,24 @@ namespace SMDB
             }
             CBCell.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox;
 
+            
+            if (Command == "EDIT_ATTRIBUTE")
+            {
+                string FKTable = AttributeEdit.FK != -1 ? Parent_SMBD.DB.tables.Where(x => x.IDTable == AttributeEdit.FK).First().ShortName : "";
+                if(FKTable != "")
+                {
+                    CBCell.Value = FKTable;
+                }
+                
+            }
 
             cellCollection[4] = CBCell;
-            e.Row.Cells[1].Value = "INT";
-            e.Row.Cells[3].Value = "PK";
+            if(Command != "EDIT_ATTRIBUTE")
+            {
+                e.Row.Cells[1].Value = "INT";
+                e.Row.Cells[3].Value = "PK";
+            }
+            
             
         }
 
@@ -92,21 +108,24 @@ namespace SMDB
 
         private void DGAttributes_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if(Command == "ADD_TABLE")
+            {
+                DataGridViewRow rowSelected = DGAttributes.Rows[e.RowIndex >= 0 ? e.RowIndex : 0];
+                if (!rowSelected.IsNewRow && e.ColumnIndex == 5)
+                {
+                    DGAttributes.Rows.Remove(rowSelected);
+                }
 
-            DataGridViewRow rowSelected = DGAttributes.Rows[e.RowIndex >= 0 ? e.RowIndex : 0];
-            if (!rowSelected.IsNewRow && e.ColumnIndex == 5)
-            {
-                DGAttributes.Rows.Remove(rowSelected);
+                if (((string)rowSelected.Cells[1].Value == "INT") || ((string)rowSelected.Cells[1].Value == "FLOAT"))
+                {
+                    rowSelected.Cells[2].Value = "4";
+                }
+                else
+                {
+                    rowSelected.Cells[2].Value = "100";
+                }
             }
-
-            if( ((string)rowSelected.Cells[1].Value == "INT") || ((string)rowSelected.Cells[1].Value == "FLOAT") )
-            {
-                rowSelected.Cells[2].Value = "4";
-            }
-            else
-            {
-                rowSelected.Cells[2].Value = "100";
-            }
+            
         }
 
         private void DGAttributes_CellValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -172,7 +191,8 @@ namespace SMDB
                 string KeyType = (string)row.Cells[3].Value;
                 string fKType = (string)row.Cells[4].Value;
                 int FKType = Parent_SMBD.DB.tables.Where(x => x.ShortName == fKType).Count() == 1 ? Parent_SMBD.DB.tables.Where(x => x.ShortName == fKType).First().IDTable : -1;
-                Attribute_ attribute = new Attribute_(table.Name, table.ShortName, Name, DataType, Length, KeyType, FKType);
+                long RewritableAA = table.GetRewritableAA();
+                Attribute_ attribute = new Attribute_(table.Name, table.ShortName, Name, DataType, Length, KeyType, FKType, RewritableAA);
             }
 
             return attributes;
@@ -180,16 +200,19 @@ namespace SMDB
         private bool ValidateAttributes()
         {
             int cantPK = 0; //Must be just 0 or 1
-            if (Command == "EDICION") cantPK = TableEdit.attributes.Where(x => x.KT == "PK").Count();
+            if (Command == "EDIT_TABLE") cantPK = TableEdit.attributes.Where(x => x.KT == "PK" && x.Status == 1).Count();
             ExceptionError DataError = new ExceptionError("It cannot be empty values for attributes","INCORRECT DATA");
             ExceptionError PKError = new ExceptionError("The are more than one PK attributes", "NO MORE THAN ONE PK PERMITTED");
             ExceptionError DecimalError = new ExceptionError("The Lenght must be only an integer number", "INCORRECT LENGTH");
             ExceptionError NoAttributes = new ExceptionError("A table must have at least one attribute", "ATTRIBUTES QUANTITY AT LEAST ONE");
             ExceptionError NoTableFKError = new ExceptionError("At least one attribute with Key Type FK doesn't have a foreign table", "NO FOREIGN TABLE");
             ExceptionError KeyTypeError = new ExceptionError("Attributes with Key types PK or FK must be of Data Type INT", "INCORRECT DATA TYPE FOR KEYS");
+            ExceptionError SameNameAttribute = new ExceptionError("There are some attributes with the same name","SAME NAME FOR ATTRIBUTES");
 
             if (DGAttributes.Rows.Count == 1) throw NoAttributes;
-            for(int i = 0; i<DGAttributes.Rows.Count -1; i++)
+            if (DGAttributes.Rows.Count != DGAttributes.Rows.Cast<DataGridViewRow>().Select(x => x.Cells[0].Value).Distinct().Count()) throw SameNameAttribute;
+            if (Command == "EDIT_TABLE") { for (int i = 0; i < DGAttributes.Rows.Count - 1; i++) { if (TableEdit.attributes.Select(x=> x.Name).Contains(DGAttributes.Rows[i].Cells[0].Value)) throw SameNameAttribute; }  }
+            for (int i = 0; i<DGAttributes.Rows.Count -1; i++)
             {
                 DataGridViewRow row = DGAttributes.Rows[i];
                 
@@ -204,20 +227,38 @@ namespace SMDB
                 if (cantPK > 1) throw PKError;
                 if (KeyType == "FK" && FKType == "") throw NoTableFKError;
                 try { int integer = Convert.ToInt32(Length); } catch(Exception e) { throw DecimalError; }
-                if ((KeyType == "PK" || KeyType == "FK") && (DataType == "STRING" || DataType == "FLOAT")) throw KeyTypeError;
+                //if ((KeyType == "PK" || KeyType == "FK") && (DataType == "STRING" || DataType == "FLOAT")) throw KeyTypeError;
                 
             }
 
             return true;
         }
 
-        public void SetEdit(Table t)
+        public void SetEditTable(Table t)
         {
             txtName.Text = t.ShortName; txtName.ReadOnly = true;
             TableEdit = t;
-            Command = "EDICION";
+            Command = "EDIT_TABLE";
             Text = "Add Atribute";
 
+        }
+
+        public void SetEditAttribute(Table t,Attribute_ a)
+        {
+            txtName.Text = t.ShortName; txtName.ReadOnly = true;
+            //DGAttributes.ReadOnly = true;
+
+            DGAttributes.Rows[0].Cells[0].Value = a.Name;
+            DGAttributes.Rows[0].Cells[1].Value = a.DT;
+            DGAttributes.Rows[0].Cells[2].Value = a.Length.ToString();
+            DGAttributes.Rows[0].Cells[3].Value = a.KT;
+            
+            TableEdit = t;
+            AttributeEdit = a;
+            Command = "EDIT_ATTRIBUTE";
+            Text = "Edit Atribute";
+            DataGridViewRowEventArgs e = new DataGridViewRowEventArgs(DGAttributes.Rows[0]);
+            DGAttributes_DefaultValuesNeeded(new object(), e);
         }
     }
 }

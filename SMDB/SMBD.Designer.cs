@@ -59,9 +59,13 @@ namespace SMDB
             this.MenuRightTreeView = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.MenuRCreateTable = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuRightTable = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.MenuRTableDeleteTable = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.MenuRTableAddAttribute = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.MenuRTableDeleteTable = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuRAttribute = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.MenuRAttributeEdit = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.MenuRAttributeDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuHorizontal.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SplitContainer)).BeginInit();
@@ -69,6 +73,7 @@ namespace SMDB
             this.SplitContainer.SuspendLayout();
             this.MenuRightTreeView.SuspendLayout();
             this.MenuRightTable.SuspendLayout();
+            this.MenuRAttribute.SuspendLayout();
             this.SuspendLayout();
             // 
             // MenuHorizontal
@@ -328,6 +333,8 @@ namespace SMDB
             this.ImagesList.Images.SetKeyName(30, "usersdb.png");
             this.ImagesList.Images.SetKeyName(31, "attribute1.png");
             this.ImagesList.Images.SetKeyName(32, "attribute2.png");
+            this.ImagesList.Images.SetKeyName(33, "keyPK.png");
+            this.ImagesList.Images.SetKeyName(34, "keyFK.png");
             // 
             // MenuRightTreeView
             // 
@@ -352,7 +359,19 @@ namespace SMDB
             this.toolStripSeparator1,
             this.MenuRTableDeleteTable});
             this.MenuRightTable.Name = "MenuRightTable";
-            this.MenuRightTable.Size = new System.Drawing.Size(241, 103);
+            this.MenuRightTable.Size = new System.Drawing.Size(194, 70);
+            // 
+            // MenuRTableAddAttribute
+            // 
+            this.MenuRTableAddAttribute.Name = "MenuRTableAddAttribute";
+            this.MenuRTableAddAttribute.Size = new System.Drawing.Size(193, 30);
+            this.MenuRTableAddAttribute.Text = "Add Attribute";
+            this.MenuRTableAddAttribute.Click += new System.EventHandler(this.MenuRTableAddAttribute_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(190, 6);
             // 
             // MenuRTableDeleteTable
             // 
@@ -361,17 +380,34 @@ namespace SMDB
             this.MenuRTableDeleteTable.Text = "Delete Table";
             this.MenuRTableDeleteTable.Click += new System.EventHandler(this.MenuRTableDeleteTable_Click);
             // 
-            // toolStripSeparator1
+            // MenuRAttribute
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(190, 6);
+            this.MenuRAttribute.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.MenuRAttribute.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuRAttributeEdit,
+            this.toolStripSeparator2,
+            this.MenuRAttributeDelete});
+            this.MenuRAttribute.Name = "MenuRAttribute";
+            this.MenuRAttribute.Size = new System.Drawing.Size(241, 103);
             // 
-            // MenuRTableAddAttribute
+            // MenuRAttributeEdit
             // 
-            this.MenuRTableAddAttribute.Name = "MenuRTableAddAttribute";
-            this.MenuRTableAddAttribute.Size = new System.Drawing.Size(240, 30);
-            this.MenuRTableAddAttribute.Text = "Add Attribute";
-            this.MenuRTableAddAttribute.Click += new System.EventHandler(this.MenuRTableAddAttribute_Click);
+            this.MenuRAttributeEdit.Name = "MenuRAttributeEdit";
+            this.MenuRAttributeEdit.Size = new System.Drawing.Size(240, 30);
+            this.MenuRAttributeEdit.Text = "Edit Attribute";
+            this.MenuRAttributeEdit.Click += new System.EventHandler(this.MenuRAttributeEdit_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(237, 6);
+            // 
+            // MenuRAttributeDelete
+            // 
+            this.MenuRAttributeDelete.Name = "MenuRAttributeDelete";
+            this.MenuRAttributeDelete.Size = new System.Drawing.Size(240, 30);
+            this.MenuRAttributeDelete.Text = "Delete Attribute";
+            this.MenuRAttributeDelete.Click += new System.EventHandler(this.MenuRAttributeDelete_Click);
             // 
             // SMBD
             // 
@@ -398,6 +434,7 @@ namespace SMDB
             this.SplitContainer.ResumeLayout(false);
             this.MenuRightTreeView.ResumeLayout(false);
             this.MenuRightTable.ResumeLayout(false);
+            this.MenuRAttribute.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -448,6 +485,10 @@ namespace SMDB
         private System.Windows.Forms.ToolStripMenuItem MenuRTableDeleteTable;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem MenuRTableAddAttribute;
+        private System.Windows.Forms.ContextMenuStrip MenuRAttribute;
+        private System.Windows.Forms.ToolStripMenuItem MenuRAttributeEdit;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem MenuRAttributeDelete;
     }
 }
 

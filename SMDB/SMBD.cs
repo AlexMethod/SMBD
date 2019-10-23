@@ -136,7 +136,22 @@ namespace SMDB
                     for (int indexAttr = 0; indexAttr < t.attributes.Count; indexAttr++)
                     {
                         Attribute_ attr = t.attributes[indexAttr];
-                        attributes[indexAttr] = new TreeNode(attr.Name, 32, 32);
+                        if(attr.KT == "PK")
+                        {
+                            attributes[indexAttr] = new TreeNode(attr.Name, 33, 33);
+                        }
+                        else if (attr.KT == "FK")
+                        {
+                            attributes[indexAttr] = new TreeNode(attr.Name, 34, 34);
+                        }
+                        else
+                        {
+                            attributes[indexAttr] = new TreeNode(attr.Name, 32, 32);
+                        }
+
+
+                        
+                        attributes[indexAttr].ContextMenuStrip = MenuRAttribute;
                     }
                     tables[indexTable] = new TreeNode(t.ShortName,0,0, attributes);
                 }
@@ -454,8 +469,28 @@ namespace SMDB
             TreeNode selected = TreeView.SelectedNode;
             Table t = DB.tables.Where(x => x.ShortName == selected.Text).First();
             CREATE_TABLE create_table = new CREATE_TABLE("Add Attribute",this);
-            create_table.SetEdit(t);
+            create_table.SetEditTable(t);
             create_table.Show();
+        }
+
+        private void MenuRAttributeEdit_Click(object sender, EventArgs e)
+        {
+            TreeNode selected = TreeView.SelectedNode;
+            Table t = DB.tables.Where(x => x.ShortName == selected.Parent.Text).First();
+            Attribute_ a = t.attributes.Where(x => x.Name == selected.Text).First();
+            CREATE_TABLE create_table = new CREATE_TABLE("Edit Attribute", this);
+            create_table.SetEditAttribute(t,a);
+            create_table.Show();
+        }
+
+        private void MenuRAttributeDelete_Click(object sender, EventArgs e)
+        {
+            TreeNode selected = TreeView.SelectedNode;
+            Table t = DB.tables.Where(x => x.ShortName == selected.Parent.Text).First();
+            Attribute_ a = t.attributes.Where(x => x.Name == selected.Text).First();
+            a.Delete();
+            t.GetAttributes();
+            DisplayDB();
         }
     }
 }
