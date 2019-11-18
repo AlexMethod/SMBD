@@ -179,7 +179,7 @@ namespace SMDB
         private List<Attribute_> SaveAttributes(Table table)
         {
             List<Attribute_> attributes = new List<Attribute_>();
-
+            if (Command == "EDIT_ATTRIBUTE" && AttributeEdit != null) AttributeEdit.Delete();
             for(int i = 0;i<DGAttributes.Rows.Count - 1;i++)
             {
                 DataGridViewRow row = DGAttributes.Rows[i];

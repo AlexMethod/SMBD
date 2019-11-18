@@ -66,6 +66,8 @@ namespace SMDB
             this.MenuRAttributeEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.MenuRAttributeDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.MenuRAttributeAddRecord = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuHorizontal.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SplitContainer)).BeginInit();
@@ -386,28 +388,41 @@ namespace SMDB
             this.MenuRAttribute.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuRAttributeEdit,
             this.toolStripSeparator2,
-            this.MenuRAttributeDelete});
+            this.MenuRAttributeDelete,
+            this.toolStripSeparator3,
+            this.MenuRAttributeAddRecord});
             this.MenuRAttribute.Name = "MenuRAttribute";
-            this.MenuRAttribute.Size = new System.Drawing.Size(241, 103);
+            this.MenuRAttribute.Size = new System.Drawing.Size(212, 106);
             // 
             // MenuRAttributeEdit
             // 
             this.MenuRAttributeEdit.Name = "MenuRAttributeEdit";
-            this.MenuRAttributeEdit.Size = new System.Drawing.Size(240, 30);
+            this.MenuRAttributeEdit.Size = new System.Drawing.Size(211, 30);
             this.MenuRAttributeEdit.Text = "Edit Attribute";
             this.MenuRAttributeEdit.Click += new System.EventHandler(this.MenuRAttributeEdit_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(237, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(208, 6);
             // 
             // MenuRAttributeDelete
             // 
             this.MenuRAttributeDelete.Name = "MenuRAttributeDelete";
-            this.MenuRAttributeDelete.Size = new System.Drawing.Size(240, 30);
+            this.MenuRAttributeDelete.Size = new System.Drawing.Size(211, 30);
             this.MenuRAttributeDelete.Text = "Delete Attribute";
             this.MenuRAttributeDelete.Click += new System.EventHandler(this.MenuRAttributeDelete_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(208, 6);
+            // 
+            // MenuRAttributeAddRecord
+            // 
+            this.MenuRAttributeAddRecord.Name = "MenuRAttributeAddRecord";
+            this.MenuRAttributeAddRecord.Size = new System.Drawing.Size(211, 30);
+            this.MenuRAttributeAddRecord.Text = "Add new record";
             // 
             // SMBD
             // 
@@ -489,6 +504,8 @@ namespace SMDB
         private System.Windows.Forms.ToolStripMenuItem MenuRAttributeEdit;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem MenuRAttributeDelete;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem MenuRAttributeAddRecord;
     }
 }
 

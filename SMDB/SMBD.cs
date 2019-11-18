@@ -313,27 +313,57 @@ namespace SMDB
         {
 
             TreeNode selected = TreeView.SelectedNode;
-            string messageError = "Invalid object";
+            string messageErrorInvalidObject = "Invalid object";
+            string messageErrorDeleteTable = "The table cannot be deleted because it has a foreign relationship";
+
+            string tablePath = Path.Combine(DB.Path, selected.Text + ".dbtable");
+            Table TableToDelete = DB.tables.Find(x=> x.Name == tablePath);
+            int IDTable = TableToDelete.IDTable;
+            
+
+
             if(selected != null)
             {
-                string messageAnswer = String.Format("Are you sure you want to delete the current Table{0} {1}", Environment.NewLine,selected.Text);
-                DialogResult result = MessageBox.Show(messageAnswer, "Delete Database!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-                if (result == DialogResult.Yes)
+                if (ValidateDeletingTable(IDTable))
                 {
-                    string tablePath = Path.Combine(DB.Path, selected.Text + ".dbtable");
-                    DB.tables.Find(x => x.Name == tablePath).Delete();
-                    DB.tables.Remove(DB.tables.Find(x => x.Name == tablePath));
-                    DisplayDB();
+                    string messageAnswer = String.Format("Are you sure you want to delete the current Table{0} {1}", Environment.NewLine,selected.Text);
+                    DialogResult result = MessageBox.Show(messageAnswer, "Delete Database!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (result == DialogResult.Yes)
+                    {
+                    
+                        DB.tables.Find(x => x.Name == tablePath).Delete();
+                        DB.tables.Remove(DB.tables.Find(x => x.Name == tablePath));
+                        DisplayDB();
+                    }
                 }
+                else
+                {
+                    MessageBox.Show(messageErrorDeleteTable, "Cannot delete table", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
             }
             else
             {
-                MessageBox.Show(messageError, "Invalid Object", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(messageErrorInvalidObject, "Invalid Object", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             
 
             
+        }
+
+        public bool ValidateDeletingTable(int IDTable)
+        {
+            bool isOkReferentialIntegrity = true;
+
+            var TablesAttributes = DB.tables.Select(s => s.attributes);
+
+            foreach (var TableAttributes in TablesAttributes)
+            {
+                int CantFK = TableAttributes.FindAll(x => x.KT == "FK" && x.FK == IDTable).Count();
+                if (CantFK > 0) return false;
+            }
+
+            return isOkReferentialIntegrity;
         }
 
         #region MENU_RIGHT_CLICK
