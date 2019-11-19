@@ -28,8 +28,8 @@ namespace SMDB
             this.WindowState = FormWindowState.Maximized;
             TreeView.Width = this.Width;
             TreeView.Height = this.Height;
-            SplitContainer.Width = this.Width;
-            SplitContainer.Height = this.Height;
+            Tools_Results.Width = this.Width;
+            Tools_Results.Height = this.Height;
 
             this.MinimumSize = this.Size;
 
@@ -458,11 +458,31 @@ namespace SMDB
         private void TreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             TreeView.SelectedNode = e.Node;
+
+            if (e.Node != null)
+            {
+                if (e.Node.Level == 0)
+                {
+                    //Do something
+                }
+                else if (e.Node.Level == 1)
+                {
+                    //Do Something
+                    ShowTableRecords();
+
+
+                }
+                else if (e.Node.Level == 2)
+                {
+                    //Do Something
+                }
+            }
         }
 
         private void TreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             TreeView.SelectedNode = e.Node;
+            
             if (e.Node != null)
             {
                 if (e.Node.Level == 0)
@@ -521,6 +541,24 @@ namespace SMDB
             a.Delete();
             t.GetAttributes();
             DisplayDB();
+        }
+
+        public void ShowTableRecords()
+        {
+            Table CurrentTable = DB.tables.Where(x => x.ShortName == TreeView.SelectedNode.Text).Count() > 0 ?
+                    DB.tables.Where(x => x.ShortName == TreeView.SelectedNode.Text).First() : null;
+
+            if (CurrentTable != null)
+            {
+                //Show table 
+                TableView.Columns.Clear();
+                foreach (var attribute in CurrentTable.attributes)
+                {
+                    DataGridTextBoxColumn x = new DataGridTextBoxColumn();
+                    x.HeaderText = attribute.Name;
+                    TableView.Columns.Add(attribute.Name, attribute.Name);
+                }
+            }
         }
     }
 }
