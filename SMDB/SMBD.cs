@@ -545,20 +545,26 @@ namespace SMDB
 
         public void ShowTableRecords()
         {
-            Table CurrentTable = DB.tables.Where(x => x.ShortName == TreeView.SelectedNode.Text).Count() > 0 ?
+            TableSelected = DB.tables.Where(x => x.ShortName == TreeView.SelectedNode.Text).Count() > 0 ?
                     DB.tables.Where(x => x.ShortName == TreeView.SelectedNode.Text).First() : null;
 
-            if (CurrentTable != null)
+            //TableView.AllowUserToAddRows = true;
+            //TableView.ReadOnly = false;
+            if (TableSelected != null)
             {
                 //Show table 
                 TableView.Columns.Clear();
-                foreach (var attribute in CurrentTable.attributes)
+                foreach (var attribute in TableSelected.attributes)
                 {
-                    DataGridTextBoxColumn x = new DataGridTextBoxColumn();
-                    x.HeaderText = attribute.Name;
                     TableView.Columns.Add(attribute.Name, attribute.Name);
                 }
             }
+        }
+
+        private void MenuRTableAddRecord_Click(object sender, EventArgs e)
+        {
+            Create_Record = new CREATE_RECORD(TableSelected,this);
+            Create_Record.Show();
         }
     }
 }

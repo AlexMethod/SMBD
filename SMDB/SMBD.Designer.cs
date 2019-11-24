@@ -57,6 +57,8 @@ namespace SMDB
             this.Tools_Results = new System.Windows.Forms.SplitContainer();
             this.TreeView = new System.Windows.Forms.TreeView();
             this.ImagesList = new System.Windows.Forms.ImageList(this.components);
+            this.SQL_Table = new System.Windows.Forms.SplitContainer();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.TableView = new System.Windows.Forms.DataGridView();
             this.MenuRightTreeView = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.MenuRCreateTable = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,28 +67,26 @@ namespace SMDB
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.MenuRTableDeleteTable = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.addNewRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuRTableAddRecord = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuRAttribute = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.MenuRAttributeEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.MenuRAttributeDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.SQL_Table = new System.Windows.Forms.SplitContainer();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.MenuHorizontal.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tools_Results)).BeginInit();
             this.Tools_Results.Panel1.SuspendLayout();
             this.Tools_Results.Panel2.SuspendLayout();
             this.Tools_Results.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.TableView)).BeginInit();
-            this.MenuRightTreeView.SuspendLayout();
-            this.MenuRightTable.SuspendLayout();
-            this.MenuRAttribute.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SQL_Table)).BeginInit();
             this.SQL_Table.Panel1.SuspendLayout();
             this.SQL_Table.Panel2.SuspendLayout();
             this.SQL_Table.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TableView)).BeginInit();
+            this.MenuRightTreeView.SuspendLayout();
+            this.MenuRightTable.SuspendLayout();
+            this.MenuRAttribute.SuspendLayout();
             this.SuspendLayout();
             // 
             // MenuHorizontal
@@ -353,6 +353,33 @@ namespace SMDB
             this.ImagesList.Images.SetKeyName(33, "keyPK.png");
             this.ImagesList.Images.SetKeyName(34, "keyFK.png");
             // 
+            // SQL_Table
+            // 
+            this.SQL_Table.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.SQL_Table.Location = new System.Drawing.Point(0, 0);
+            this.SQL_Table.Name = "SQL_Table";
+            this.SQL_Table.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // SQL_Table.Panel1
+            // 
+            this.SQL_Table.Panel1.Controls.Add(this.textBox1);
+            // 
+            // SQL_Table.Panel2
+            // 
+            this.SQL_Table.Panel2.Controls.Add(this.TableView);
+            this.SQL_Table.Size = new System.Drawing.Size(1242, 902);
+            this.SQL_Table.SplitterDistance = 236;
+            this.SQL_Table.TabIndex = 1;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBox1.Location = new System.Drawing.Point(0, 0);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(1240, 234);
+            this.textBox1.TabIndex = 0;
+            // 
             // TableView
             // 
             this.TableView.AllowUserToAddRows = false;
@@ -364,7 +391,7 @@ namespace SMDB
             this.TableView.ReadOnly = true;
             this.TableView.RowHeadersVisible = false;
             this.TableView.RowTemplate.Height = 28;
-            this.TableView.Size = new System.Drawing.Size(1091, 345);
+            this.TableView.Size = new System.Drawing.Size(1240, 660);
             this.TableView.TabIndex = 0;
             // 
             // MenuRightTreeView
@@ -390,39 +417,40 @@ namespace SMDB
             this.toolStripSeparator1,
             this.MenuRTableDeleteTable,
             this.toolStripSeparator4,
-            this.addNewRecordToolStripMenuItem});
+            this.MenuRTableAddRecord});
             this.MenuRightTable.Name = "MenuRightTable";
-            this.MenuRightTable.Size = new System.Drawing.Size(212, 106);
+            this.MenuRightTable.Size = new System.Drawing.Size(241, 139);
             // 
             // MenuRTableAddAttribute
             // 
             this.MenuRTableAddAttribute.Name = "MenuRTableAddAttribute";
-            this.MenuRTableAddAttribute.Size = new System.Drawing.Size(211, 30);
+            this.MenuRTableAddAttribute.Size = new System.Drawing.Size(240, 30);
             this.MenuRTableAddAttribute.Text = "Add Attribute";
             this.MenuRTableAddAttribute.Click += new System.EventHandler(this.MenuRTableAddAttribute_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(208, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(237, 6);
             // 
             // MenuRTableDeleteTable
             // 
             this.MenuRTableDeleteTable.Name = "MenuRTableDeleteTable";
-            this.MenuRTableDeleteTable.Size = new System.Drawing.Size(211, 30);
+            this.MenuRTableDeleteTable.Size = new System.Drawing.Size(240, 30);
             this.MenuRTableDeleteTable.Text = "Delete Table";
             this.MenuRTableDeleteTable.Click += new System.EventHandler(this.MenuRTableDeleteTable_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(208, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(237, 6);
             // 
-            // addNewRecordToolStripMenuItem
+            // MenuRTableAddRecord
             // 
-            this.addNewRecordToolStripMenuItem.Name = "addNewRecordToolStripMenuItem";
-            this.addNewRecordToolStripMenuItem.Size = new System.Drawing.Size(211, 30);
-            this.addNewRecordToolStripMenuItem.Text = "Add new record";
+            this.MenuRTableAddRecord.Name = "MenuRTableAddRecord";
+            this.MenuRTableAddRecord.Size = new System.Drawing.Size(240, 30);
+            this.MenuRTableAddRecord.Text = "Add new record";
+            this.MenuRTableAddRecord.Click += new System.EventHandler(this.MenuRTableAddRecord_Click);
             // 
             // MenuRAttribute
             // 
@@ -459,33 +487,6 @@ namespace SMDB
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(206, 6);
             // 
-            // SQL_Table
-            // 
-            this.SQL_Table.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.SQL_Table.Location = new System.Drawing.Point(0, 0);
-            this.SQL_Table.Name = "SQL_Table";
-            this.SQL_Table.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // SQL_Table.Panel1
-            // 
-            this.SQL_Table.Panel1.Controls.Add(this.textBox1);
-            // 
-            // SQL_Table.Panel2
-            // 
-            this.SQL_Table.Panel2.Controls.Add(this.TableView);
-            this.SQL_Table.Size = new System.Drawing.Size(1093, 702);
-            this.SQL_Table.SplitterDistance = 351;
-            this.SQL_Table.TabIndex = 1;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox1.Location = new System.Drawing.Point(0, 0);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(1091, 349);
-            this.textBox1.TabIndex = 0;
-            // 
             // SMBD
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -510,15 +511,15 @@ namespace SMDB
             this.Tools_Results.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Tools_Results)).EndInit();
             this.Tools_Results.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.TableView)).EndInit();
-            this.MenuRightTreeView.ResumeLayout(false);
-            this.MenuRightTable.ResumeLayout(false);
-            this.MenuRAttribute.ResumeLayout(false);
             this.SQL_Table.Panel1.ResumeLayout(false);
             this.SQL_Table.Panel1.PerformLayout();
             this.SQL_Table.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.SQL_Table)).EndInit();
             this.SQL_Table.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.TableView)).EndInit();
+            this.MenuRightTreeView.ResumeLayout(false);
+            this.MenuRightTable.ResumeLayout(false);
+            this.MenuRAttribute.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -546,6 +547,8 @@ namespace SMDB
         public string currentPath = "";
         private CREATE_DB Create_DB = new CREATE_DB();
         private CREATE_TABLE Create_Table;
+        private CREATE_RECORD Create_Record;
+        public Table TableSelected; 
         public string currentDB = "";
         public bool isEditDB = false;
         public bool isEditTable = false;
@@ -575,7 +578,7 @@ namespace SMDB
         private System.Windows.Forms.ToolStripMenuItem MenuRAttributeDelete;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ToolStripMenuItem addNewRecordToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem MenuRTableAddRecord;
         private DataGridView TableView;
         private SplitContainer SQL_Table;
         private TextBox textBox1;

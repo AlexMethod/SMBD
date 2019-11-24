@@ -56,6 +56,12 @@
     <Compile Include="CREATE_DB.Designer.cs">
       <DependentUpon>CREATE_DB.cs</DependentUpon>
     </Compile>
+    <Compile Include="CREATE_RECORD.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CREATE_RECORD.Designer.cs">
+      <DependentUpon>CREATE_RECORD.cs</DependentUpon>
+    </Compile>
     <Compile Include="CREATE_TABLE.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,6 +78,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="CREATE_DB.resx">
       <DependentUpon>CREATE_DB.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CREATE_RECORD.resx">
+      <DependentUpon>CREATE_RECORD.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CREATE_TABLE.resx">
       <DependentUpon>CREATE_TABLE.cs</DependentUpon>
@@ -209,6 +218,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\keyFK.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\records.png" />
+    <None Include="Resources\records1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

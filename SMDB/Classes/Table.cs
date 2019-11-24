@@ -79,5 +79,10 @@ namespace SMDB.Classes
             return rewritableAttr.Count() > 0 ? rewritableAttr.First().AA : 0;
         }
 
+        public void SaveRecords()
+        {
+
+        }
+
     }
 }
