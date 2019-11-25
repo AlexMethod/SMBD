@@ -54,11 +54,14 @@ namespace SMDB
             this.MenuHDisconnectDB = new System.Windows.Forms.ToolStripButton();
             this.MenuHNewDB = new System.Windows.Forms.ToolStripButton();
             this.MenuHDeleteDB = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.MenuHRunQuery = new System.Windows.Forms.ToolStripButton();
             this.Tools_Results = new System.Windows.Forms.SplitContainer();
             this.TreeView = new System.Windows.Forms.TreeView();
             this.ImagesList = new System.Windows.Forms.ImageList(this.components);
             this.SQL_Table = new System.Windows.Forms.SplitContainer();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.SQLQuery = new System.Windows.Forms.TextBox();
             this.TableView = new System.Windows.Forms.DataGridView();
             this.MenuRightTreeView = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.MenuRCreateTable = new System.Windows.Forms.ToolStripMenuItem();
@@ -224,7 +227,10 @@ namespace SMDB
             this.MenuHConnectDB,
             this.MenuHDisconnectDB,
             this.MenuHNewDB,
-            this.MenuHDeleteDB});
+            this.MenuHDeleteDB,
+            this.toolStripSeparator5,
+            this.toolStripSeparator6,
+            this.MenuHRunQuery});
             this.toolStrip1.Location = new System.Drawing.Point(0, 33);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1345, 31);
@@ -276,6 +282,26 @@ namespace SMDB
             this.MenuHDeleteDB.Size = new System.Drawing.Size(28, 28);
             this.MenuHDeleteDB.Text = "Delete DB";
             this.MenuHDeleteDB.Click += new System.EventHandler(this.MenuHDeleteDB_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 31);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 31);
+            // 
+            // MenuHRunQuery
+            // 
+            this.MenuHRunQuery.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.MenuHRunQuery.Image = global::SMDB.Properties.Resources.play;
+            this.MenuHRunQuery.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.MenuHRunQuery.Name = "MenuHRunQuery";
+            this.MenuHRunQuery.Size = new System.Drawing.Size(28, 28);
+            this.MenuHRunQuery.Text = "Run Query";
+            this.MenuHRunQuery.Click += new System.EventHandler(this.MenuHRunQuery_Click);
             // 
             // Tools_Results
             // 
@@ -362,7 +388,7 @@ namespace SMDB
             // 
             // SQL_Table.Panel1
             // 
-            this.SQL_Table.Panel1.Controls.Add(this.textBox1);
+            this.SQL_Table.Panel1.Controls.Add(this.SQLQuery);
             // 
             // SQL_Table.Panel2
             // 
@@ -371,14 +397,14 @@ namespace SMDB
             this.SQL_Table.SplitterDistance = 236;
             this.SQL_Table.TabIndex = 1;
             // 
-            // textBox1
+            // SQLQuery
             // 
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox1.Location = new System.Drawing.Point(0, 0);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(1240, 234);
-            this.textBox1.TabIndex = 0;
+            this.SQLQuery.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SQLQuery.Location = new System.Drawing.Point(0, 0);
+            this.SQLQuery.Multiline = true;
+            this.SQLQuery.Name = "SQLQuery";
+            this.SQLQuery.Size = new System.Drawing.Size(1240, 234);
+            this.SQLQuery.TabIndex = 0;
             // 
             // TableView
             // 
@@ -419,36 +445,36 @@ namespace SMDB
             this.toolStripSeparator4,
             this.MenuRTableAddRecord});
             this.MenuRightTable.Name = "MenuRightTable";
-            this.MenuRightTable.Size = new System.Drawing.Size(241, 139);
+            this.MenuRightTable.Size = new System.Drawing.Size(212, 106);
             // 
             // MenuRTableAddAttribute
             // 
             this.MenuRTableAddAttribute.Name = "MenuRTableAddAttribute";
-            this.MenuRTableAddAttribute.Size = new System.Drawing.Size(240, 30);
+            this.MenuRTableAddAttribute.Size = new System.Drawing.Size(211, 30);
             this.MenuRTableAddAttribute.Text = "Add Attribute";
             this.MenuRTableAddAttribute.Click += new System.EventHandler(this.MenuRTableAddAttribute_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(237, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(208, 6);
             // 
             // MenuRTableDeleteTable
             // 
             this.MenuRTableDeleteTable.Name = "MenuRTableDeleteTable";
-            this.MenuRTableDeleteTable.Size = new System.Drawing.Size(240, 30);
+            this.MenuRTableDeleteTable.Size = new System.Drawing.Size(211, 30);
             this.MenuRTableDeleteTable.Text = "Delete Table";
             this.MenuRTableDeleteTable.Click += new System.EventHandler(this.MenuRTableDeleteTable_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(237, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(208, 6);
             // 
             // MenuRTableAddRecord
             // 
             this.MenuRTableAddRecord.Name = "MenuRTableAddRecord";
-            this.MenuRTableAddRecord.Size = new System.Drawing.Size(240, 30);
+            this.MenuRTableAddRecord.Size = new System.Drawing.Size(211, 30);
             this.MenuRTableAddRecord.Text = "Add new record";
             this.MenuRTableAddRecord.Click += new System.EventHandler(this.MenuRTableAddRecord_Click);
             // 
@@ -581,7 +607,10 @@ namespace SMDB
         private System.Windows.Forms.ToolStripMenuItem MenuRTableAddRecord;
         private DataGridView TableView;
         private SplitContainer SQL_Table;
-        private TextBox textBox1;
+        private TextBox SQLQuery;
+        private ToolStripSeparator toolStripSeparator5;
+        private ToolStripSeparator toolStripSeparator6;
+        private ToolStripButton MenuHRunQuery;
     }
 }
 

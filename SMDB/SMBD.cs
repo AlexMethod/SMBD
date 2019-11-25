@@ -516,11 +516,19 @@ namespace SMDB
 
         private void MenuRTableAddAttribute_Click(object sender, EventArgs e)
         {
-            TreeNode selected = TreeView.SelectedNode;
-            Table t = DB.tables.Where(x => x.ShortName == selected.Text).First();
-            CREATE_TABLE create_table = new CREATE_TABLE("Add Attribute",this);
-            create_table.SetEditTable(t);
-            create_table.Show();
+            ExceptionError EditAttributesError = new ExceptionError("Cannot Add, Delete or Update any Attribute since the table contains already registries", "CANNOT EDIT ATTRIBUTES");
+
+            try
+            {
+                TreeNode selected = TreeView.SelectedNode;
+                Table t = DB.tables.Where(x => x.ShortName == selected.Text).First();
+                if (t.registries.Count() > 0) { throw EditAttributesError; }
+                CREATE_TABLE create_table = new CREATE_TABLE("Add Attribute", this);
+                create_table.SetEditTable(t);
+                create_table.Show();
+            }
+            catch(ExceptionError err) { err.showMessage(); }
+            
         }
 
         private void MenuRAttributeEdit_Click(object sender, EventArgs e)
@@ -545,26 +553,498 @@ namespace SMDB
 
         public void ShowTableRecords()
         {
+            
             TableSelected = DB.tables.Where(x => x.ShortName == TreeView.SelectedNode.Text).Count() > 0 ?
                     DB.tables.Where(x => x.ShortName == TreeView.SelectedNode.Text).First() : null;
 
-            //TableView.AllowUserToAddRows = true;
-            //TableView.ReadOnly = false;
-            if (TableSelected != null)
+            try
             {
-                //Show table 
-                TableView.Columns.Clear();
-                foreach (var attribute in TableSelected.attributes)
+
+                if (TableSelected != null)
                 {
-                    TableView.Columns.Add(attribute.Name, attribute.Name);
+                    List<Registry> registries = TableSelected.GetRegistries();
+
+                    //Encabezados
+                    TableView.Columns.Clear();
+                    
+                    foreach (var attribute in TableSelected.attributes)
+                    {
+                        TableView.Columns.Add(attribute.Name, attribute.Name);
+                    }
+
+                    //Boton de borrado
+                    //TableView.Columns.Add("Delete","");
+                    //DataGridViewColumnCollection column = TableView.Columns;
+                    //column[TableView.ColumnCount-1].Width = 30;
+                    //DataGridViewColumn c =   column[TableView.ColumnCount - 1];
+                    DataGridViewImageColumn columImage = new DataGridViewImageColumn();
+                    columImage.Name = "Delete";
+                    columImage.Image = Properties.Resources.delete;
+                    columImage.ImageLayout = DataGridViewImageCellLayout.Stretch;
+                    columImage.Width = 25;
+                    TableView.Columns.Add(columImage);
+                    
+
+
+
+
+                    TableView.Rows.Add();
+                    DataGridViewRow layoutRow = (DataGridViewRow)TableView.Rows[0].Clone();
+                    TableView.Rows.Clear();
+
+
+                    //Valores
+                    foreach (Registry registry in registries)
+                    {
+                        DataGridViewRow row = (DataGridViewRow)layoutRow.Clone();
+                        for (int i = 0; i < registry.Values.Count(); i++)
+                        {
+                            Data d = registry.Values[i];
+                            row.Cells[i].Value = d.Value;
+                        }
+                        TableView.Rows.Add(row);
+                    }
+
+                    TableSelected.registries = registries;
                 }
             }
+            catch(ExceptionError err) { err.showMessage(); }
+
+            
+
+            
+        }
+
+        public void ShowTableRecordsFromQuery()
+        {
+
+            Query query = null;
+
+            try
+            {
+
+                if (validateQuery())
+                {
+                    query = GetQuery();
+                }
+
+                TableSelected = query.Table;
+
+                if (TableSelected != null)
+                {
+                    List<Registry> registries = new List<Registry>();
+                    if (query.isWhere)
+                    {
+                        List<Registry> auxRegistries = TableSelected.GetRegistries();
+
+                        foreach(Registry registry in auxRegistries)
+                        {
+                            Data d = registry.Values.Where(x => x.Attribute.Name == query.Column).First();
+                            string DT = d.Attribute.DT;
+                            switch (query.Operation)
+                            {
+                                case "=":
+
+                                    if(DT == "STRING")
+                                    {
+                                        if (FormatString(d.Value) == query.Value)
+                                        {
+                                            registries.Add(registry);
+                                        }
+                                    }
+                                    else if(DT == "INT"){
+                                        if (d.Value == Convert.ToInt32(query.Value))
+                                        {
+                                            registries.Add(registry);
+                                        }
+                                    }else if(DT == "FLOAT")
+                                    {
+                                        if (d.Value == Convert.ToSingle(query.Value))
+                                        {
+                                            registries.Add(registry);
+                                        }
+                                    }
+                                    
+                                    break;
+                                case ">":
+
+                                    if (DT == "STRING")
+                                    {
+                                        if (FormatString(d.Value) > query.Value)
+                                        {
+                                            registries.Add(registry);
+                                        }
+                                    }
+                                    else if (DT == "INT")
+                                    {
+                                        if (d.Value > Convert.ToInt32(query.Value))
+                                        {
+                                            registries.Add(registry);
+                                        }
+                                    }
+                                    else if (DT == "FLOAT")
+                                    {
+                                        if (d.Value > Convert.ToSingle(query.Value))
+                                        {
+                                            registries.Add(registry);
+                                        }
+                                    }
+                                    break;
+                                case "<":
+
+                                    if (DT == "STRING")
+                                    {
+                                        if (FormatString(d.Value) < query.Value)
+                                        {
+                                            registries.Add(registry);
+                                        }
+                                    }
+                                    else if (DT == "INT")
+                                    {
+                                        if (d.Value < Convert.ToInt32(query.Value))
+                                        {
+                                            registries.Add(registry);
+                                        }
+                                    }
+                                    else if (DT == "FLOAT")
+                                    {
+                                        if (d.Value < Convert.ToSingle(query.Value))
+                                        {
+                                            registries.Add(registry);
+                                        }
+                                    }
+                                    break;
+                                case ">=":
+
+                                    if (DT == "STRING")
+                                    {
+                                        if (FormatString(d.Value) >= query.Value)
+                                        {
+                                            registries.Add(registry);
+                                        }
+                                    }
+                                    else if (DT == "INT")
+                                    {
+                                        if (d.Value >= Convert.ToInt32(query.Value))
+                                        {
+                                            registries.Add(registry);
+                                        }
+                                    }
+                                    else if (DT == "FLOAT")
+                                    {
+                                        if (d.Value >= Convert.ToSingle(query.Value))
+                                        {
+                                            registries.Add(registry);
+                                        }
+                                    }
+                                    break;
+                                case "<=":
+
+                                    if (DT == "STRING")
+                                    {
+                                        if (FormatString(d.Value) <= query.Value)
+                                        {
+                                            registries.Add(registry);
+                                        }
+                                    }
+                                    else if (DT == "INT")
+                                    {
+                                        if (d.Value <= Convert.ToInt32(query.Value))
+                                        {
+                                            registries.Add(registry);
+                                        }
+                                    }
+                                    else if (DT == "FLOAT")
+                                    {
+                                        if (d.Value <= Convert.ToSingle(query.Value))
+                                        {
+                                            registries.Add(registry);
+                                        }
+                                    }
+                                    break;
+                                case "<>":
+
+                                    if (DT == "STRING")
+                                    {
+                                        if (FormatString(d.Value) != query.Value)
+                                        {
+                                            registries.Add(registry);
+                                        }
+                                    }
+                                    else if (DT == "INT")
+                                    {
+                                        if (d.Value != Convert.ToInt32(query.Value))
+                                        {
+                                            registries.Add(registry);
+                                        }
+                                    }
+                                    else if (DT == "FLOAT")
+                                    {
+                                        if (d.Value != Convert.ToSingle(query.Value))
+                                        {
+                                            registries.Add(registry);
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        registries = TableSelected.GetRegistries();
+                    }
+                    
+                    List<Registry> AllRegistries = TableSelected.GetRegistries();
+
+                    //Encabezados
+                    TableView.Columns.Clear();
+
+                    foreach(var column in query.Columns)
+                    {
+                        Attribute_ attribute = query.Table.attributes.Where(x => x.Name == column).First();
+                        TableView.Columns.Add(attribute.Name, attribute.Name);
+                    }
+
+                    TableView.Rows.Add();
+                    DataGridViewRow layoutRow = (DataGridViewRow)TableView.Rows[0].Clone();
+                    TableView.Rows.Clear();
+
+                    //Valores
+                    foreach (Registry registry in registries)
+                    {
+                        DataGridViewRow row = (DataGridViewRow)layoutRow.Clone();
+
+                        for(int i = 0; i< query.Columns.Count(); i++)
+                        {
+                            string column = query.Columns[i];
+                            Attribute_ attribute = query.Table.attributes.Where(x => x.Name == column).First();
+                            Data d = registry.Values.Where(x => x.Attribute.Name == column).First();
+                            row.Cells[i].Value = d.Value;
+                        }
+                        TableView.Rows.Add(row);
+                    }
+
+                    TableSelected.registries = AllRegistries;
+                }
+            }
+            catch (ExceptionError err) { err.showMessage(); }
+
         }
 
         private void MenuRTableAddRecord_Click(object sender, EventArgs e)
         {
             Create_Record = new CREATE_RECORD(TableSelected,this);
             Create_Record.Show();
+        }
+
+        public bool validateQuery()
+        {
+            ExceptionError BadSintaxis = new ExceptionError("Incorrect sintaxis, use instead [SELECT | select ] [COLUMS | *] [FROM | from] [TABLE NAME] or [SELECT | select ] [COLUMS | *] [FROM | from] [TABLE NAME] [WHERE | where] [COLUMN] [OPERATOR] [VALUE]", "ERROR");
+            ExceptionError ConnectionError = new ExceptionError("The is not a DB connected", "CONNECTION ERROR");
+            ExceptionError SelectError = new ExceptionError("Use SELECT or select", "SELECT ERROR");
+            ExceptionError ColumnsError = new ExceptionError("The column does not exist", "COLUMNS ERROR");
+            ExceptionError FromError = new ExceptionError("Use FROM or from", "FROM ERROR");
+            ExceptionError TableError = new ExceptionError("The table does not exist", "TABLE ERROR");
+            ExceptionError WhereError = new ExceptionError("Use WHERE or where", "WHERE ERROR");
+            ExceptionError ColumnError = new ExceptionError("The column does not exist", "COLUMN ERROR");
+            ExceptionError OperationError = new ExceptionError("Invalid operation", "OPERATION ERROR");
+            ExceptionError ValueError = new ExceptionError("The value type does not match the column type", "VALUE ERROR");
+
+
+            if (DB == null) throw ConnectionError;
+            List<string> tableNames = DB.tables.Select(x => x.ShortName).ToList();
+            List<string> Operations = new List<string>();
+            Operations.Add("=");
+            Operations.Add(">");
+            Operations.Add("<");
+            Operations.Add(">=");
+            Operations.Add("<=");
+            Operations.Add("<>");
+
+
+
+            if (SQLQuery.Text == "") return false;
+            if (SQLQuery.Text != "")
+            {
+                string query = SQLQuery.Text;
+
+                string[] commands = query.Split().Where(x => x != "").ToArray();
+
+                if (commands.Length != 4 && commands.Length != 8) throw BadSintaxis;
+
+
+                string select = "";
+                string columns = "";
+                string from = "";
+                string table = "";
+                string where = "";
+                string column = "";
+                string operation = "";
+                string value = "";
+
+                Table Table = null;
+                List<string> attributeNames = new List<string>();
+                List<string> selectedColumns = new List<string>();
+
+                if (commands.Length == 4 || commands.Length == 8)
+                {
+                    select = commands[0];
+                    columns = commands[1];
+                    from = commands[2];
+                    table = commands[3];
+
+                    if (select.ToLower() != "select") throw SelectError;
+                    if (from.ToLower() != "from") throw FromError;
+                    if (!tableNames.Contains(table)) throw TableError;
+
+                    Table = DB.tables.Where(x => x.ShortName == table).First();
+                    attributeNames = Table.attributes.Select(x => x.Name).ToList();
+                    selectedColumns = new List<string>();
+
+                    if (columns != "*")
+                    {
+                        selectedColumns = columns.Split(',').Where(x => x != "").ToList();
+                        if (selectedColumns.Count() == 0) throw ColumnsError;
+                        foreach (string selectedColumn in selectedColumns)
+                        {
+                            if (!attributeNames.Contains(selectedColumn)) throw ColumnsError;
+                        }
+                    }
+                    else
+                    {
+                        selectedColumns = attributeNames;
+                    }
+                }
+                if (commands.Length == 8)
+                {
+                    where = commands[4];
+                    column = commands[5];
+                    operation = commands[6];
+                    value = commands[7];
+
+
+
+                    if (where.ToLower() != "where") throw WhereError;
+                    if (!Operations.Contains(operation)) throw OperationError;
+                    if (!attributeNames.Contains(column)) throw ColumnError;
+
+                    Attribute_ attribute = Table.attributes.Where(x => x.Name == column).First();
+
+                    if (attribute.DT == "STRING" && value[0] != '\'' && value[column.Length - 1] != '\'') throw ValueError;
+                    if (attribute.DT == "INT")
+                    {
+                        try
+                        {
+                            Convert.ToInt32(value);
+                        }
+                        catch (Exception) { throw ValueError; }
+                    }
+                    if (attribute.DT == "FLOAT")
+                    {
+                        try
+                        {
+                            Convert.ToSingle(value);
+                        }
+                        catch (Exception) { throw ValueError; }
+                    }
+                }
+            }
+
+
+            return true;
+
+
+        }
+
+        public Query GetQuery()
+        {
+            Query Query = new Query();
+
+            string query = SQLQuery.Text;
+            string[] commands = query.Split().Where(x => x != "").ToArray();
+
+            
+            string columns = "";
+            string table = "";
+            string column = "";
+            string operation = "";
+            string value = "";
+
+            
+            columns = commands[1];
+            table = commands[3];
+
+            Table Table = null;
+            List<string> attributeNames = new List<string>();
+            List<string> selectedColumns = new List<string>();
+
+
+            Table = DB.tables.Where(x => x.ShortName == table).First();
+            attributeNames = Table.attributes.Select(x => x.Name).ToList();
+            if (columns != "*")
+            {
+                selectedColumns = columns.Split(',').Where(x => x != "").ToList();
+            }
+            else
+            {
+                selectedColumns = attributeNames;
+            }
+            
+            
+            if (commands.Length == 8)
+            {
+                column = commands[5];
+                operation = commands[6];
+                value = commands[7];
+
+                Attribute_ attribute = Table.attributes.Where(x => x.Name == column).First();
+                Query.Column = column;
+                Query.DT = attribute.DT;
+                Query.Operation = operation;
+                if (attribute.DT == "STRING")
+                {
+                    value = value.Remove(0, 1);
+                    value = value.Remove(value.Length - 1, 1);
+                }
+                Query.Value = value;
+                Query.isWhere = true;
+            }
+            else
+            {
+                Query.isWhere = false;
+            }
+
+            
+            Query.Columns = selectedColumns;
+            Query.Table = Table;
+            
+
+
+            return Query;
+        }
+
+        private void MenuHRunQuery_Click(object sender, EventArgs e)
+        {
+            ShowTableRecordsFromQuery();
+        }
+
+        public string FormatString(string str)
+        {
+            string result = string.Empty;
+            int cantLimitString = 0;
+
+            foreach (char c in str)
+            {
+                if (c == '\0')
+                {
+                    cantLimitString++;
+                }
+            }
+
+            int startIndex = str.Length - cantLimitString;
+            result = str.Remove(startIndex, cantLimitString);
+
+            return result;
         }
     }
 }

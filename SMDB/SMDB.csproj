@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Attribute_.cs" />
+    <Compile Include="Classes\Data.cs" />
     <Compile Include="Classes\Database.cs" />
     <Compile Include="Classes\ExceptionError.cs" />
     <Compile Include="Classes\FileHandler.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="CREATE_TABLE.Designer.cs">
       <DependentUpon>CREATE_TABLE.cs</DependentUpon>
     </Compile>
+    <Compile Include="Classes\Query.cs" />
     <Compile Include="SMBD.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -220,6 +222,8 @@
     <None Include="Resources\keyFK.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\play.png" />
+    <None Include="Resources\delete.png" />
     <Content Include="Resources\records.png" />
     <None Include="Resources\records1.png" />
   </ItemGroup>

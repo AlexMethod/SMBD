@@ -43,6 +43,7 @@ namespace SMDB
         {
             ExceptionError NoTableName = new ExceptionError("The table must have a name","NO TABLE NAME");
             ExceptionError SameTableName = new ExceptionError("The table name already exists","SAME TABLE NAME");
+            ExceptionError ExistingRecords = new ExceptionError("It is not possible to add a new attribute since the table already contains at least one record", "CANNOT ADD ATTRIBUTES");
 
 
             string newFile = Parent_SMBD.DB.Path + "\\" + txtName.Text + ".dbtable";
@@ -56,12 +57,18 @@ namespace SMDB
 
             if (isOkAttributes)
             {
-                Table NTable = Command == "ADD_TABLE" ? new Table(newFile, Parent_SMBD.DB.GetNextIDTable()) : TableEdit;
-                List<Attribute_> attributes = SaveAttributes(NTable);
-                NTable.GetAttributes();
-               if(Command == "ADD_TABLE") Parent_SMBD.DB.tables.Add(NTable);
-                Parent_SMBD.DisplayDB();
-                Hide();
+                try
+                {
+                    Table NTable = Command == "ADD_TABLE" ? new Table(newFile, Parent_SMBD.DB.GetNextIDTable()) : TableEdit;
+                    if (NTable.DirRegistros != -1) throw ExistingRecords;
+                    List<Attribute_> attributes = SaveAttributes(NTable);
+                    NTable.GetAttributes();
+                    if (Command == "ADD_TABLE") Parent_SMBD.DB.tables.Add(NTable);
+                    Parent_SMBD.DisplayDB();
+                    Hide();
+                }
+                catch(ExceptionError err) { err.showMessage(); }
+                
             }
             
         }
@@ -199,6 +206,7 @@ namespace SMDB
         }
         private bool ValidateAttributes()
         {
+
             int cantPK = 0; //Must be just 0 or 1
             if (Command == "EDIT_TABLE") cantPK = TableEdit.attributes.Where(x => x.KT == "PK" && x.Status == 1).Count();
             ExceptionError DataError = new ExceptionError("It cannot be empty values for attributes","INCORRECT DATA");

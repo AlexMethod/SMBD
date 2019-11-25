@@ -121,6 +121,18 @@ namespace SMDB.Classes
             return intBytes;
         }
 
+        public static byte[] floatToBytes(float number)
+        {
+            byte[] intBytes = BitConverter.GetBytes(number).ToArray();
+            return intBytes;
+        }
+
+        public static float bytesToFloat(byte[] bytes)
+        {
+            float num = BitConverter.ToSingle(bytes, 0);
+            return num;
+        }
+
         public static int bytesToInt(byte[] bytes)
         {
             int num = BitConverter.ToInt32(bytes, 0);

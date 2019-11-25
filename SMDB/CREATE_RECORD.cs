@@ -58,19 +58,48 @@ namespace SMDB
             if (isOkRecords)
             {
 
-                Parent_SMBD.TableSelected.SaveRecords();
+                SaveRegistries();
                 Hide();
             }
+        }
+
+        public void SaveRegistries()
+        {
+            Table Table = Parent_SMBD.TableSelected;
+            long tamFile = FileHandler.getFileLength(Table.Name);
+            List<Registry> registries = Table.GetRegistries();
+            if(registries.Count() == 0) Table.DirRegistry = tamFile;
+            
+            for (int i = 0; i < TableViewRecord.Rows.Count - 1; i++)
+            {
+                DataGridViewRow row = TableViewRecord.Rows[i];
+                List<Data> datas = new List<Data>();
+                for (int j = 0; j < row.Cells.Count; j++)
+                {
+                    DataGridViewCell cell = row.Cells[j];
+                    Attribute_ Attribute = Parent_SMBD.TableSelected.attributes[j];
+                    string value = cell.Value != null ? cell.Value.ToString() : "";
+                    
+                    Data data = new Data(value, Attribute);
+                    datas.Add(data);
+                }
+                Registry registry = new Registry(Table.Name, datas);
+            }
+
+            Parent_SMBD.ShowTableRecords();
         }
 
         private bool ValidateRecords()
         {
             
-            
             ExceptionError DataTypeError = new ExceptionError("There are incorrect data type values", "INCORRECT DATA");
-            ExceptionError ReferentialIntegrityError = new ExceptionError("The Foreing Key does not exist", "REFERENCIAL INTEGRITY");
-            
-            
+            ExceptionError ReferentialIntegrityForeignError = new ExceptionError("The Foreing Key does not exist", "REFERENCIAL INTEGRITY");
+            ExceptionError SamePKError = new ExceptionError("The table already contains a registry with the PK inserted", "SAME PK");
+
+
+            Table Table = Parent_SMBD.TableSelected;
+            List<Data> datas = new List<Data>();
+            int CantPK = 0;
             for (int i = 0; i < TableViewRecord.Rows.Count - 1; i++)
             {
                 DataGridViewRow row = TableViewRecord.Rows[i];
@@ -78,12 +107,141 @@ namespace SMDB
                 for( int j = 0; j < row.Cells.Count; j++)
                 {
                     DataGridViewCell cell = row.Cells[j];
-                    var hola = 0;
+                    
+                    Attribute_ Attribute = Parent_SMBD.TableSelected.attributes[j];
 
+                    string value = cell.Value != null ? cell.Value.ToString() : "";
+                    string AttributeName = Attribute.Name;
+                    string KT = Attribute.KT;
+                    string DT = Attribute.DT;
+                    int FK = Attribute.FK;
+
+                    if (KT == "PK") CantPK++;
+                    if ((KT == "PK" || KT == "FK") && value == "") throw DataTypeError;
+                    try { if (DT == "INT" || DT == "FLOAT") { Convert.ToDouble(value); } }catch(Exception err) { throw DataTypeError; }
+                    if (CantPK > 1) throw SamePKError;
+                    //Si el atributo es una llave foranea, debera existir el registro ingresado
+                    if(KT == "FK" && FK != -1)
+                    {
+                        Table ForeignTable = Parent_SMBD.DB.tables.Where(x => x.IDTable == FK).FirstOrDefault();
+
+                        List<Registry> foreignRegistries = ForeignTable.GetRegistries();
+                        
+
+                        if (foreignRegistries.Count() == 0) throw ReferentialIntegrityForeignError;
+
+                        if (!validateForeignRegistry(foreignRegistries, value, DT)) throw ReferentialIntegrityForeignError;
+                    }
+
+                    if(KT == "PK")
+                    {
+                        List<Registry> registries = Table.GetRegistries();
+                        if (!validatePKRegistry(registries, value, DT)) throw SamePKError;
+                    }
                 }
             }
 
             return true;
+        }
+
+        public bool validateForeignRegistry(List<Registry> registries, string value, string DT)
+        {
+            bool response = false;
+
+            if(DT == "INT")
+            {
+                int Value = Convert.ToInt32(value);
+
+                foreach(Registry registry in registries)
+                {
+                    Data PK = registry.Values.Where(x => x.Attribute.KT == "PK").First();
+                    dynamic dynamicPKValue = PK.Value;
+                    int PKValue = dynamicPKValue;
+                    if(Value == PKValue)
+                    {
+                        response = true;
+                    }
+                }
+            }
+            else if(DT == "FLOAT")
+            {
+                float Value = Convert.ToSingle(value);
+                foreach (Registry registry in registries)
+                {
+                    Data PK = registry.Values.Where(x => x.Attribute.KT == "PK").First();
+                    dynamic dynamicPKValue = PK.Value;
+                    float PKValue = dynamicPKValue;
+                    if (Value == PKValue) { response = true; }
+                }
+            }
+            else if(DT == "STRING")
+            {
+                string Value = value;
+                foreach (Registry registry in registries)
+                {
+                    Data PK = registry.Values.Where(x => x.Attribute.KT == "PK").First();
+                    dynamic dynamicPKValue = PK.Value;
+                    string PKValue = dynamicPKValue;
+
+                    if (Value == FormatString(PKValue))
+                    {
+                        response = true;
+                    }
+                }
+            }
+
+
+            return response;
+        }
+
+        public bool validatePKRegistry(List<Registry> registries, string value, string DT)
+        {
+            bool response = true;
+
+            if (DT == "INT")
+            {
+                int Value = Convert.ToInt32(value);
+
+                foreach (Registry registry in registries)
+                {
+                    Data PK = registry.Values.Where(x => x.Attribute.KT == "PK").First();
+                    dynamic dynamicPKValue = PK.Value;
+                    int PKValue = dynamicPKValue;
+                    if (Value == PKValue)
+                    {
+                        response = false;
+                    }
+                }
+            }
+            else if (DT == "FLOAT")
+            {
+                float Value = Convert.ToSingle(value);
+                foreach (Registry registry in registries)
+                {
+                    Data PK = registry.Values.Where(x => x.Attribute.KT == "PK").First();
+                    dynamic dynamicPKValue = PK.Value;
+                    float PKValue = dynamicPKValue;
+                    if (Value == PKValue) { response = false; }
+                }
+            }
+            else if (DT == "STRING")
+            {
+                string Value = value;
+                foreach (Registry registry in registries)
+                {
+                    Data PK = registry.Values.Where(x => x.Attribute.KT == "PK").First();
+                    dynamic dynamicPKValue = PK.Value;
+                    string PKValue = dynamicPKValue;
+
+                    if (Value == FormatString(PKValue))
+                    {
+                        response = false;
+                    }
+                }
+            }
+
+
+            return response;
         }
 
         private void TableViewRecord_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
@@ -213,6 +371,25 @@ namespace SMDB
                 // This fires the cell value changed handler below
                 TableViewRecord.CommitEdit(DataGridViewDataErrorContexts.Commit);
             }
+        }
+
+        public string FormatString(string str)
+        {
+            string result = string.Empty;
+            int cantLimitString = 0;
+
+            foreach(char c in str)
+            {
+                if(c == '\0')
+                {
+                    cantLimitString++;
+                }
+            }
+
+            int startIndex = str.Length - cantLimitString;
+            result = str.Remove(startIndex, cantLimitString);
+
+            return result;
         }
     }
 }
