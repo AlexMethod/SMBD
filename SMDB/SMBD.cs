@@ -553,7 +553,7 @@ namespace SMDB
 
         public void ShowTableRecords()
         {
-            
+            isEditableTable = true;
             TableSelected = DB.tables.Where(x => x.ShortName == TreeView.SelectedNode.Text).Count() > 0 ?
                     DB.tables.Where(x => x.ShortName == TreeView.SelectedNode.Text).First() : null;
 
@@ -567,21 +567,18 @@ namespace SMDB
                     //Encabezados
                     TableView.Columns.Clear();
                     
+                    TableView.ReadOnly = false;
                     foreach (var attribute in TableSelected.attributes)
                     {
                         TableView.Columns.Add(attribute.Name, attribute.Name);
                     }
 
                     //Boton de borrado
-                    //TableView.Columns.Add("Delete","");
-                    //DataGridViewColumnCollection column = TableView.Columns;
-                    //column[TableView.ColumnCount-1].Width = 30;
-                    //DataGridViewColumn c =   column[TableView.ColumnCount - 1];
+                    
                     DataGridViewImageColumn columImage = new DataGridViewImageColumn();
                     columImage.Name = "Delete";
-                    columImage.Image = Properties.Resources.delete;
-                    columImage.ImageLayout = DataGridViewImageCellLayout.Stretch;
-                    columImage.Width = 25;
+                    columImage.HeaderText = "";
+                    columImage.Width = 30;
                     TableView.Columns.Add(columImage);
                     
 
@@ -617,7 +614,7 @@ namespace SMDB
 
         public void ShowTableRecordsFromQuery()
         {
-
+            isEditableTable = false;
             Query query = null;
 
             try
@@ -798,8 +795,9 @@ namespace SMDB
 
                     //Encabezados
                     TableView.Columns.Clear();
-
-                    foreach(var column in query.Columns)
+                    TableView.ReadOnly = true;
+                    TableView.AllowUserToAddRows = false;
+                    foreach (var column in query.Columns)
                     {
                         Attribute_ attribute = query.Table.attributes.Where(x => x.Name == column).First();
                         TableView.Columns.Add(attribute.Name, attribute.Name);
@@ -1045,6 +1043,172 @@ namespace SMDB
             result = str.Remove(startIndex, cantLimitString);
 
             return result;
+        }
+
+        private void TableView_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            ExceptionError ConstraintError = new ExceptionError("This registry cannot be deleted cause there are at least one registry using it in a foreign relation", "CANNOT DELETE REGISTRY");
+            if(e.RowIndex != -1 && isEditableTable)
+            {
+                DataGridViewRow rowSelected = TableView.Rows[e.RowIndex >= 0 ? e.RowIndex : 0];
+                if (!rowSelected.IsNewRow && e.ColumnIndex == TableView.Columns.Count - 1) //Borrar registro
+                {
+                    string messageAnswer = String.Format("Are you sure you want to delete the selected registry");
+                    DialogResult result = MessageBox.Show(messageAnswer, "Delete Registsry!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        
+
+                        try
+                        {
+
+                            Registry registryToDelete = TableSelected.registries[rowSelected.Index];
+                            List<Table> ForeignTables = DB.tables.Where(x => x.attributes.Where(y => y.FK == TableSelected.IDTable).Count() > 0).ToList();
+                            foreach (Table t in ForeignTables)
+                            {
+                                List<Registry> registries = t.GetRegistries();
+                                foreach (Registry registry in registries)
+                                {
+                                    List<Data> ValuesFK = registry.Values.Where(x => x.Attribute.FK == TableSelected.IDTable).ToList();
+                                    dynamic ValueToDeletePK = registryToDelete.Values.Where(x => x.Attribute.KT == "PK").First().Value;
+                                    foreach(Data d in ValuesFK)
+                                    {
+                                        dynamic ValueFK = d.Value;
+                                        if (ValueFK == ValueToDeletePK)
+                                        {
+                                            //Error
+                                            throw ConstraintError;
+                                        }
+                                    }
+                                }
+
+                            }
+
+                            registryToDelete.Delete(TableSelected.Name);
+                            TableSelected.GetRegistries();
+                            ShowTableRecords();
+                        }
+                        catch(ExceptionError err) { err.showMessage(); }
+                        
+                    }
+                    
+                }
+            }
+        }
+
+        private void IntColumn_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void FloatColumn_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && !(e.KeyChar == '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void StringColumn_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            int columnIndex = TableView.CurrentCell.ColumnIndex;
+            string columnName = TableView.Columns[columnIndex].Name;
+            Attribute_ Attribute = TableSelected.attributes.Find(x => x.Name == columnName);
+
+            if (Attribute != null)
+            {
+                int MaxLength = Attribute.Length;
+                if (TableView.CurrentCell.Value != null)
+                {
+                    string value = (string)TableView.CurrentCell.Value;
+
+                    if (value.Length >= MaxLength && e.KeyChar != '\b')
+                    {
+                        e.Handled = true;
+                    }
+
+                }
+            }
+
+
+        }
+
+        private void TableView_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            ExceptionError DataError = new ExceptionError("Incorrect value", "INCORRECT DATA");
+
+            e.Control.KeyPress -= new KeyPressEventHandler(IntColumn_KeyPress);
+            e.Control.KeyPress -= new KeyPressEventHandler(FloatColumn_KeyPress);
+            e.Control.KeyPress -= new KeyPressEventHandler(StringColumn_KeyPress);
+
+            int columnIndex = TableView.CurrentCell.ColumnIndex;
+            string columnName = TableView.Columns[columnIndex].Name;
+
+            //Obtiene los atributos agrupados por tipo de dato
+            var IntAttributes = TableSelected.attributes.Where(x => x.DT == "INT");
+            var FloatAttributes = TableSelected.attributes.Where(x => x.DT == "FLOAT");
+            var StringAttributes = TableSelected.attributes.Where(x => x.DT == "STRING");
+
+            //Crea una lista de los nombres de los atributos agrupados por tipo de dato
+            List<string> NamesIntAttributes = IntAttributes.Count() > 0 ? IntAttributes.Select(s => s.Name).ToList() : new List<string>();
+            List<string> NamesFloatAttributes = FloatAttributes.Count() > 0 ? FloatAttributes.Select(s => s.Name).ToList() : new List<string>();
+            List<string> NamesStringAttributes = StringAttributes.Count() > 0 ? StringAttributes.Select(s => s.Name).ToList() : new List<string>();
+
+            //Verifica el tipo de la celda actual
+            bool typeInt = NamesIntAttributes.Contains(columnName);
+            bool typeFloat = NamesFloatAttributes.Contains(columnName);
+            bool stringType = NamesStringAttributes.Contains(columnName);
+
+
+            //Valida que no se puedan ingresar letras si el tipo de atributo es entero o flotante
+            if (typeInt)
+            {
+                TextBox tb = e.Control as TextBox;
+                if (tb != null)
+                {
+                    tb.KeyPress += new KeyPressEventHandler(IntColumn_KeyPress);
+                }
+            }
+            else if (typeFloat)
+            {
+                TextBox tb = e.Control as TextBox;
+                if (tb != null)
+                {
+                    tb.KeyPress += new KeyPressEventHandler(FloatColumn_KeyPress);
+                }
+            }
+            else if (stringType)
+            {
+                TextBox tb = e.Control as TextBox;
+                if (tb != null)
+                {
+                    tb.KeyPress += new KeyPressEventHandler(StringColumn_KeyPress);
+                }
+            }
+        }
+
+        private void TableView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridViewRow rowSelected = TableView.Rows[e.RowIndex >= 0 ? e.RowIndex : 0];
+            string value = rowSelected.Cells[e.ColumnIndex].Value != null ? (string)rowSelected.Cells[e.ColumnIndex].Value : "";
+
+
+            TableView.CurrentCell.Value = value;
+        }
+
+        private void TableView_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (TableView.IsCurrentCellDirty)
+            {
+                // This fires the cell value changed handler below
+                TableView.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
         }
     }
 }

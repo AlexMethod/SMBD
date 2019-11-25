@@ -58,6 +58,7 @@
             this.TableViewRecord.RowTemplate.Height = 28;
             this.TableViewRecord.Size = new System.Drawing.Size(1104, 138);
             this.TableViewRecord.TabIndex = 2;
+            this.TableViewRecord.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.TableViewRecord_CellClick);
             this.TableViewRecord.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.TableViewRecord_CellValueChanged);
             this.TableViewRecord.CurrentCellDirtyStateChanged += new System.EventHandler(this.TableViewRecord_CurrentCellDirtyStateChanged);
             this.TableViewRecord.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.TableViewRecord_EditingControlShowing);

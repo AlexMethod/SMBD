@@ -32,6 +32,12 @@ namespace SMDB
                     TableViewRecord.Columns.Add(attribute.Name, attribute.Name);
                     
                 }
+
+                DataGridViewImageColumn columImage = new DataGridViewImageColumn();
+                columImage.Name = "Delete";
+                columImage.HeaderText = "";
+                columImage.Width = 30;
+                TableViewRecord.Columns.Add(columImage);
             }
 
         }
@@ -74,7 +80,7 @@ namespace SMDB
             {
                 DataGridViewRow row = TableViewRecord.Rows[i];
                 List<Data> datas = new List<Data>();
-                for (int j = 0; j < row.Cells.Count; j++)
+                for (int j = 0; j < row.Cells.Count - 1; j++)
                 {
                     DataGridViewCell cell = row.Cells[j];
                     Attribute_ Attribute = Parent_SMBD.TableSelected.attributes[j];
@@ -104,7 +110,7 @@ namespace SMDB
             {
                 DataGridViewRow row = TableViewRecord.Rows[i];
 
-                for( int j = 0; j < row.Cells.Count; j++)
+                for( int j = 0; j < row.Cells.Count - 1; j++)
                 {
                     DataGridViewCell cell = row.Cells[j];
                     
@@ -390,6 +396,15 @@ namespace SMDB
             result = str.Remove(startIndex, cantLimitString);
 
             return result;
+        }
+
+        private void TableViewRecord_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridViewRow rowSelected = TableViewRecord.Rows[e.RowIndex >= 0 ? e.RowIndex : 0];
+            if (!rowSelected.IsNewRow && e.ColumnIndex == TableViewRecord.Columns.Count -1 )
+            {
+                TableViewRecord.Rows.Remove(rowSelected);
+            }
         }
     }
 }

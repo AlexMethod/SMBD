@@ -125,11 +125,11 @@ namespace SMDB
 
                 if (((string)rowSelected.Cells[1].Value == "INT") || ((string)rowSelected.Cells[1].Value == "FLOAT"))
                 {
-                    rowSelected.Cells[2].Value = "4";
+                    if(rowSelected.Cells[2].Value == null || (string)rowSelected.Cells[2].Value == "" || (string)rowSelected.Cells[2].Value != "4") rowSelected.Cells[2].Value = "4";
                 }
                 else
                 {
-                    rowSelected.Cells[2].Value = "100";
+                    if (rowSelected.Cells[2].Value == null || (string)rowSelected.Cells[2].Value == "" || (string)rowSelected.Cells[2].Value != "50") rowSelected.Cells[2].Value = "50";
                 }
             }
             
@@ -144,12 +144,12 @@ namespace SMDB
             {
                 if( ((string)rowSelected.Cells[1].Value == "INT") || ((string)rowSelected.Cells[1].Value == "FLOAT"))
                 {
-                    rowSelected.Cells[2].Value = "4";
+                    if (rowSelected.Cells[2].Value == null || (string)rowSelected.Cells[2].Value == "" || (string)rowSelected.Cells[2].Value != "4") rowSelected.Cells[2].Value = "4";
                     rowSelected.Cells[2].ReadOnly = true;
                 }
                 else
                 {
-                    rowSelected.Cells[2].Value = "100";
+                    if (rowSelected.Cells[2].Value == null || (string)rowSelected.Cells[2].Value == "" || (string)rowSelected.Cells[2].Value != "50") rowSelected.Cells[2].Value = "50";
                     rowSelected.Cells[2].ReadOnly = false;
                 }
             }

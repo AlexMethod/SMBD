@@ -68,7 +68,7 @@ namespace SMDB.Classes
 
         public List<Registry> GetRegistries()
         {
-            List<Registry> registries = new List<Registry>();
+            registries = new List<Registry>();
 
             //
             if (DirRegistros != -1)

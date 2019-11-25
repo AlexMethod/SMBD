@@ -419,6 +419,10 @@ namespace SMDB
             this.TableView.RowTemplate.Height = 28;
             this.TableView.Size = new System.Drawing.Size(1240, 660);
             this.TableView.TabIndex = 0;
+            this.TableView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.TableView_CellClick);
+            this.TableView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.TableView_CellValueChanged);
+            this.TableView.CurrentCellDirtyStateChanged += new System.EventHandler(this.TableView_CurrentCellDirtyStateChanged);
+            this.TableView.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.TableView_EditingControlShowing);
             // 
             // MenuRightTreeView
             // 
@@ -580,6 +584,7 @@ namespace SMDB
         public bool isEditTable = false;
         public bool isEditAttribute = false;
         public Database DB = null;
+        public bool isEditableTable = false;
 
         //-----------------------------------------------------------
         private System.Windows.Forms.ToolStripMenuItem MenuDeleteDB;

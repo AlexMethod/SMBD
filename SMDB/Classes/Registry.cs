@@ -101,5 +101,12 @@ namespace SMDB.Classes
             long TamFileAfterData = FileHandler.getFileLength(TableName);
             FileHandler.writeOnFile(TableName, BytesStats, TamFileAfterData);
         }
+
+        public void Delete(string TableName)
+        {
+            long DirStatus = AR + 8 + Values.Sum(x => x.Attribute.Length);
+            byte[] statusCanceled = FileHandler.intToBytes(0);
+            FileHandler.writeOnFile(TableName, statusCanceled, DirStatus);
+        }
     }
 }
