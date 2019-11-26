@@ -224,6 +224,8 @@
   <ItemGroup>
     <None Include="Resources\play.png" />
     <None Include="Resources\delete.png" />
+    <None Include="Resources\edit.png" />
+    <None Include="Resources\edit1.png" />
     <Content Include="Resources\records.png" />
     <None Include="Resources\records1.png" />
   </ItemGroup>

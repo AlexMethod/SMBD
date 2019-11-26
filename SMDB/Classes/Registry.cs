@@ -108,5 +108,42 @@ namespace SMDB.Classes
             byte[] statusCanceled = FileHandler.intToBytes(0);
             FileHandler.writeOnFile(TableName, statusCanceled, DirStatus);
         }
+
+        public void Update(string TableName,List<Data> datas)
+        {
+            long startIndex = AR + 8;
+            long index = startIndex;
+            //Los datos propios del registro
+            foreach (Data data in datas)
+            {
+                string DT = data.Attribute.DT;
+
+                if (DT == "INT")
+                {
+                    dynamic dynamicValue = data.Value;
+                    int Value = Convert.ToInt32(dynamicValue);
+                    byte[] bytes = FileHandler.intToBytes(Value);
+                    FileHandler.writeOnFile(TableName, bytes, index);
+                }
+                else if (DT == "FLOAT")
+                {
+                    dynamic dynamicValue = data.Value;
+                    float Value = Convert.ToSingle(dynamicValue);
+                    byte[] bytes = FileHandler.floatToBytes(Value);
+                    FileHandler.writeOnFile(TableName, bytes, index);
+                }
+                else if (DT == "STRING")
+                {
+                    dynamic dynamicValue = data.Value;
+                    string Value = dynamicValue;
+                    string auxValue = Value.PadRight(data.Attribute.Length, '\0');
+
+                    byte[] bytes = FileHandler.stringToBytes(auxValue);
+                    FileHandler.writeOnFile(TableName, bytes, index);
+                }
+
+                index += data.Attribute.Length;
+            }
+        }
     }
 }

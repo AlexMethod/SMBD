@@ -573,18 +573,24 @@ namespace SMDB
                         TableView.Columns.Add(attribute.Name, attribute.Name);
                     }
 
+                    //Boton de edicion
+                    DataGridViewImageColumn columImageEdit = new DataGridViewImageColumn();
+                    columImageEdit.Name = "Edit";
+                    columImageEdit.HeaderText = "";
+                    columImageEdit.Image = Properties.Resources.edit1;
+                    columImageEdit.ImageLayout = DataGridViewImageCellLayout.Stretch;
+                    columImageEdit.Width = 30;
+                    TableView.Columns.Add(columImageEdit);
+
                     //Boton de borrado
-                    
+
                     DataGridViewImageColumn columImage = new DataGridViewImageColumn();
                     columImage.Name = "Delete";
                     columImage.HeaderText = "";
                     columImage.Width = 30;
                     TableView.Columns.Add(columImage);
+
                     
-
-
-
-
                     TableView.Rows.Add();
                     DataGridViewRow layoutRow = (DataGridViewRow)TableView.Rows[0].Clone();
                     TableView.Rows.Clear();
@@ -1051,6 +1057,7 @@ namespace SMDB
             if(e.RowIndex != -1 && isEditableTable)
             {
                 DataGridViewRow rowSelected = TableView.Rows[e.RowIndex >= 0 ? e.RowIndex : 0];
+                RowSelected = rowSelected;
                 if (!rowSelected.IsNewRow && e.ColumnIndex == TableView.Columns.Count - 1) //Borrar registro
                 {
                     string messageAnswer = String.Format("Are you sure you want to delete the selected registry");
@@ -1058,7 +1065,7 @@ namespace SMDB
 
                     if (result == DialogResult.Yes)
                     {
-                        
+
 
                         try
                         {
@@ -1072,7 +1079,7 @@ namespace SMDB
                                 {
                                     List<Data> ValuesFK = registry.Values.Where(x => x.Attribute.FK == TableSelected.IDTable).ToList();
                                     dynamic ValueToDeletePK = registryToDelete.Values.Where(x => x.Attribute.KT == "PK").First().Value;
-                                    foreach(Data d in ValuesFK)
+                                    foreach (Data d in ValuesFK)
                                     {
                                         dynamic ValueFK = d.Value;
                                         if (ValueFK == ValueToDeletePK)
@@ -1089,9 +1096,47 @@ namespace SMDB
                             TableSelected.GetRegistries();
                             ShowTableRecords();
                         }
-                        catch(ExceptionError err) { err.showMessage(); }
-                        
+                        catch (ExceptionError err) { err.showMessage(); }
+
                     }
+
+                }
+                else if (!rowSelected.IsNewRow && e.ColumnIndex == TableView.Columns.Count - 2) //Editar registro
+                {
+                    ExceptionError NullValueForIntFloat = new ExceptionError("Values of type INT or FLOAT cannot be empty", "ERROR VALUE");
+
+                    try
+                    {
+                        Registry registryToEdit = TableSelected.registries.Count() > 0 ? TableSelected.registries[RowSelected.Index] : null;
+                        List<Data> values = new List<Data>();
+                        for (int i = 0; i < rowSelected.Cells.Count - 2; i++)
+                        {
+                            DataGridViewCell cell = rowSelected.Cells[i];
+                            Attribute_ attribute = TableSelected.attributes[i];
+
+                            if(attribute.DT == "INT")
+                            {
+                                try
+                                {
+                                    Convert.ToInt32(cell.Value);
+                                }
+                                catch (Exception) { throw NullValueForIntFloat; }
+                            }
+                            if (attribute.DT == "FLOAT")
+                            {
+                                try
+                                {
+                                    Convert.ToSingle(cell.Value);
+                                }
+                                catch (Exception) { throw NullValueForIntFloat; }
+                            }
+                            Data data = new Data(cell.Value, attribute);
+                            values.Add(data);
+                        }
+
+                        registryToEdit.Update(TableSelected.Name, values);
+                    }
+                    catch(ExceptionError err) { err.showMessage(); }
                     
                 }
             }
@@ -1099,8 +1144,14 @@ namespace SMDB
 
         private void IntColumn_KeyPress(object sender, KeyPressEventArgs e)
         {
+            Registry registryToEdit = TableSelected.registries.Count() > 0 ? TableSelected.registries[RowSelected.Index] : null;
 
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            bool isRegistryInForeignRelation = registryToEdit != null ? isRegistryInRelation(registryToEdit) : false;
+            bool isCurrentCellPK = registryToEdit != null ? registryToEdit.Values[TableView.CurrentCell.ColumnIndex].Attribute.KT == "PK" : false;
+            bool isNotPossibleToEdit = isRegistryInForeignRelation && isCurrentCellPK;
+            
+            
+            if (   (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar)) || isNotPossibleToEdit  )
             {
                 e.Handled = true;
             }
@@ -1108,8 +1159,13 @@ namespace SMDB
 
         private void FloatColumn_KeyPress(object sender, KeyPressEventArgs e)
         {
+            Registry registryToEdit = TableSelected.registries.Count() > 0 ? TableSelected.registries[RowSelected.Index] : null;
 
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && !(e.KeyChar == '.'))
+            bool isRegistryInForeignRelation = registryToEdit != null ? isRegistryInRelation(registryToEdit) : false;
+            bool isCurrentCellPK = registryToEdit != null ? registryToEdit.Values[TableView.CurrentCell.ColumnIndex].Attribute.KT == "PK" : false;
+            bool isNotPossibleToEdit = isRegistryInForeignRelation && isCurrentCellPK;
+
+            if (  (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && !(e.KeyChar == '.')) || isNotPossibleToEdit )
             {
                 e.Handled = true;
             }
@@ -1121,14 +1177,22 @@ namespace SMDB
             string columnName = TableView.Columns[columnIndex].Name;
             Attribute_ Attribute = TableSelected.attributes.Find(x => x.Name == columnName);
 
+
+            Registry registryToEdit = TableSelected.registries.Count() > 0 ? TableSelected.registries[RowSelected.Index] : null;
+
+            bool isRegistryInForeignRelation = registryToEdit != null ? isRegistryInRelation(registryToEdit) : false;
+            bool isCurrentCellPK = registryToEdit != null ? registryToEdit.Values[TableView.CurrentCell.ColumnIndex].Attribute.KT == "PK" : false;
+            bool isNotPossibleToEdit = isRegistryInForeignRelation && isCurrentCellPK;
+
+
             if (Attribute != null)
             {
                 int MaxLength = Attribute.Length;
                 if (TableView.CurrentCell.Value != null)
                 {
-                    string value = (string)TableView.CurrentCell.Value;
-
-                    if (value.Length >= MaxLength && e.KeyChar != '\b')
+                    string rawValue = (string)TableView.CurrentCell.Value;
+                    string value = FormatString(rawValue);
+                    if ( (value.Length >= MaxLength && e.KeyChar != '\b') || isNotPossibleToEdit)
                     {
                         e.Handled = true;
                     }
@@ -1198,7 +1262,7 @@ namespace SMDB
             DataGridViewRow rowSelected = TableView.Rows[e.RowIndex >= 0 ? e.RowIndex : 0];
             string value = rowSelected.Cells[e.ColumnIndex].Value != null ? (string)rowSelected.Cells[e.ColumnIndex].Value : "";
 
-
+            
             TableView.CurrentCell.Value = value;
         }
 
@@ -1209,6 +1273,34 @@ namespace SMDB
                 // This fires the cell value changed handler below
                 TableView.CommitEdit(DataGridViewDataErrorContexts.Commit);
             }
+        }
+
+
+        public bool isRegistryInRelation(Registry registryToBeEdited)
+        {
+            
+            bool blockPK = false;
+
+            List<Table> ForeignTables = DB.tables.Where(x => x.attributes.Where(y => y.FK == TableSelected.IDTable).Count() > 0).ToList();
+            foreach (Table t in ForeignTables)
+            {
+                List<Registry> registries = t.GetRegistries();
+                foreach (Registry registry in registries)
+                {
+                    List<Data> ValuesFK = registry.Values.Where(x => x.Attribute.FK == TableSelected.IDTable).ToList();
+                    dynamic ValueToDeletePK = registryToBeEdited.Values.Where(x => x.Attribute.KT == "PK").First().Value;
+                    foreach (Data d in ValuesFK)
+                    {
+                        dynamic ValueFK = d.Value;
+                        if (ValueFK == ValueToDeletePK)
+                        {
+                            blockPK = true;
+                        }
+                    }
+                }
+
+            }
+            return blockPK;
         }
     }
 }

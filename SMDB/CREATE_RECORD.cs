@@ -347,11 +347,10 @@ namespace SMDB
                 int MaxLength = Attribute.Length;
                 if (TableViewRecord.CurrentCell.Value != null)
                 {
-                    string value = (string)TableViewRecord.CurrentCell.Value;
-                    
+                    string rawValue = (string)TableViewRecord.CurrentCell.Value;
+                    string value = FormatString(rawValue);
                     if (value.Length  >= MaxLength && e.KeyChar != '\b')
                     {
-                        
                         e.Handled = true;
                     }
                     

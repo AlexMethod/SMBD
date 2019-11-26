@@ -585,6 +585,7 @@ namespace SMDB
         public bool isEditAttribute = false;
         public Database DB = null;
         public bool isEditableTable = false;
+        public DataGridViewRow RowSelected;
 
         //-----------------------------------------------------------
         private System.Windows.Forms.ToolStripMenuItem MenuDeleteDB;
