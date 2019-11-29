@@ -1135,6 +1135,7 @@ namespace SMDB
                         }
 
                         registryToEdit.Update(TableSelected.Name, values);
+
                     }
                     catch(ExceptionError err) { err.showMessage(); }
                     

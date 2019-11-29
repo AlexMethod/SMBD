@@ -51,6 +51,7 @@ namespace SMDB
             try {
                 if (txtName.Text == "") throw NoTableName;
                 if (Parent_SMBD.DB.tables.Where(x => x.ShortName == txtName.Text).Count() > 0 && Command =="ADD_TABLE") throw SameTableName;
+                //Table NTable = Command == "ADD_TABLE" ? new Table(newFile, Parent_SMBD.DB.GetNextIDTable()) : TableEdit;
                 isOkAttributes = ValidateAttributes();
             }
             catch (ExceptionError err) { err.showMessage(); }
@@ -80,7 +81,11 @@ namespace SMDB
 
             foreach(Table t in Parent_SMBD.DB.tables)
             {
-                CBCell.Items.Add(t.ShortName);
+                if(t.attributes.Where(x=> x.KT == "PK").Count() > 0)
+                {
+                    CBCell.Items.Add(t.ShortName);
+                }
+                
             }
             CBCell.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox;
 
@@ -212,12 +217,12 @@ namespace SMDB
             ExceptionError DataError = new ExceptionError("It cannot be empty values for attributes","INCORRECT DATA");
             ExceptionError PKError = new ExceptionError("The are more than one PK attributes", "NO MORE THAN ONE PK PERMITTED");
             ExceptionError DecimalError = new ExceptionError("The Lenght must be only an integer number", "INCORRECT LENGTH");
-            ExceptionError NoAttributes = new ExceptionError("A table must have at least one attribute", "ATTRIBUTES QUANTITY AT LEAST ONE");
+            ExceptionError PKDataTypeError = new ExceptionError("Attribute with foreign table does not match data type", "DATA TYPE ERROR");
             ExceptionError NoTableFKError = new ExceptionError("At least one attribute with Key Type FK doesn't have a foreign table", "NO FOREIGN TABLE");
             ExceptionError KeyTypeError = new ExceptionError("Attributes with Key types PK or FK must be of Data Type INT", "INCORRECT DATA TYPE FOR KEYS");
             ExceptionError SameNameAttribute = new ExceptionError("There are some attributes with the same name","SAME NAME FOR ATTRIBUTES");
 
-            if (DGAttributes.Rows.Count == 1) throw NoAttributes;
+            //if (DGAttributes.Rows.Count == 1) throw NoAttributes;
             if (DGAttributes.Rows.Count != DGAttributes.Rows.Cast<DataGridViewRow>().Select(x => x.Cells[0].Value).Distinct().Count()) throw SameNameAttribute;
             if (Command == "EDIT_TABLE") { for (int i = 0; i < DGAttributes.Rows.Count - 1; i++) { if (TableEdit.attributes.Select(x=> x.Name).Contains(DGAttributes.Rows[i].Cells[0].Value)) throw SameNameAttribute; }  }
             for (int i = 0; i<DGAttributes.Rows.Count -1; i++)
@@ -234,8 +239,13 @@ namespace SMDB
                 if (Name == "" || DataType == "" || Length == "" || KeyType == "") throw DataError;
                 if (cantPK > 1) throw PKError;
                 if (KeyType == "FK" && FKType == "") throw NoTableFKError;
+                if(KeyType == "FK")
+                {
+                    Table t = Parent_SMBD.DB.tables.Where(x => x.ShortName == FKType).First();
+                    string PKType = t.attributes.Where(x=> x.KT == "PK").First().DT;
+                    if (PKType != DataType) throw PKDataTypeError;
+                }
                 try { int integer = Convert.ToInt32(Length); } catch(Exception e) { throw DecimalError; }
-                //if ((KeyType == "PK" || KeyType == "FK") && (DataType == "STRING" || DataType == "FLOAT")) throw KeyTypeError;
                 
             }
 

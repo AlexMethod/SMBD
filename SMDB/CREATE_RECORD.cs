@@ -122,7 +122,17 @@ namespace SMDB
                     string DT = Attribute.DT;
                     int FK = Attribute.FK;
 
-                    if (KT == "PK") CantPK++;
+
+                    
+                    if (Attribute.DT == "INT")
+                    {
+                        CantPK = Table.registries.Where(x => x.Values.Where(s => s.Attribute.KT == "PK" && s.Value == Convert.ToInt32(value)).Count() > 0).Count();
+                    }
+                    else if(Attribute.DT == "FLOAT")
+                    {
+                        CantPK = Table.registries.Where(x => x.Values.Where(s => s.Attribute.KT == "PK" && s.Value == Convert.ToSingle(value)).Count() > 0).Count();
+                    }
+
                     if ((KT == "PK" || KT == "FK") && value == "") throw DataTypeError;
                     try { if (DT == "INT" || DT == "FLOAT") { Convert.ToDouble(value); } }catch(Exception err) { throw DataTypeError; }
                     if (CantPK > 1) throw SamePKError;
